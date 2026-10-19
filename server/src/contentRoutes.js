@@ -99,7 +99,6 @@ const SETTING_KEYS = new Set([
   "capAccountTitle",
   "capContact",
   "capPdf",
-  "launchPosts",
   "navTraining",
   "heroWork",
   "heroOpen",
@@ -227,23 +226,10 @@ function parsePromiseImages(value) {
   }
 }
 
-function parsePosts(value) {
-  try {
-    const parsed = JSON.parse(value || "[]");
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .map((item) => ({ title: line(item?.title, 120), text: block(item?.text, 2000) }))
-      .filter((item) => item.title || item.text);
-  } catch {
-    return [];
-  }
-}
-
 async function readSettings(db) {
   const settings = {};
   for (const row of await many(db, "SELECT key, value FROM settings")) {
     if (row.key === "ticks" || row.key === "promises" || row.key === "extraServices") settings[row.key] = parseList(row.value);
-    else if (row.key === "launchPosts") settings[row.key] = parsePosts(row.value);
     else if (row.key === "galleryCategories") settings[row.key] = parseCategories(row.value);
     else if (row.key === "promiseImages") settings[row.key] = parsePromiseImages(row.value);
     else settings[row.key] = row.value;
@@ -253,7 +239,6 @@ async function readSettings(db) {
 
 function storeSetting(key, value) {
   if (key === "ticks" || key === "promises" || key === "extraServices") return asList(value);
-  if (key === "launchPosts") return JSON.stringify(parsePosts(JSON.stringify(value)));
   if (key === "galleryCategories") return JSON.stringify(parseCategories(JSON.stringify(value)));
   if (key === "promiseImages") return JSON.stringify(parsePromiseImages(JSON.stringify(value)));
   return block(value, key === "footer" || key.endsWith("Text") || key === "thankEmail" || key === "thankPhone" ? 2000 : 500);

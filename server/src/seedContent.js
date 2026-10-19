@@ -487,24 +487,6 @@ const EXTRA_SETTINGS = {
     { src: "/work/food/food-02.jpg", position: "72% center" },
     { src: "/work/plant/plant-01.jpg", position: "42% 28%" },
   ]),
-  launchPosts: JSON.stringify([
-    {
-      title: "Introduction",
-      text: "Comprehensive Cleaning works with commercial buildings, industrial sites, warehouses and food-manufacturing facilities across Australia. Engagements start with a site assessment and a written scope, so the clean is defined before anyone is on the tools.",
-    },
-    {
-      title: "Industrial and warehouse",
-      text: "Factories and warehouses need a clean that respects traffic, racking and the hours the floor has to stay clear. We scope the areas, the frequency and the window, then supervise the crew against that scope.",
-    },
-    {
-      title: "Food manufacturing",
-      text: "In a food plant the clean has to fit the production window and the hygiene rules already on site. We walk the plant first, agree what is in and out, and record what was completed.",
-    },
-    {
-      title: "Scope and supervision",
-      text: "A useful cleaning agreement names the areas, the window, the supervisor and the way the job is signed off. That is the standard Comprehensive Cleaning is set up to work to. If you want a site assessed, the enquiry form on the website is the place to start.",
-    },
-  ]),
 };
 
 const EXTRA_PAGES = [
@@ -580,6 +562,7 @@ export async function ensureSettings(db) {
   for (const [key, value] of Object.entries(missing)) {
     if (!have.has(key)) await exec(db, "INSERT INTO settings (key, value) VALUES (?, ?)", [key, value]);
   }
+  if (have.has("launchPosts")) await exec(db, "DELETE FROM settings WHERE key = ?", ["launchPosts"]);
 }
 
 const WORK_GROUPS = [

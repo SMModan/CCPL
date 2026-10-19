@@ -7,6 +7,7 @@ import { AuthContext } from "./auth";
 import { ClientDetail, Clients, Crew, Invoices, Jobs, Quotes, Schedule, Sites, money } from "./Operations";
 import { Desk, crmPath } from "./paths";
 import { blank, drop, emailOk, hasProblems } from "../validate";
+import { Bars, Columns, Ring, WeekChart } from "./Charts";
 import Drawer from "./Drawer";
 import Website from "./Website";
 import "./crm.css";
@@ -62,7 +63,7 @@ export default function CrmApp({ variant = "classic", base = "/crm" }) {
         <Route path="quotes" element={<Quotes />} />
         <Route path="invoices" element={<Invoices />} />
         <Route path="website" element={<Website />} />
-        <Route path="content" element={<ContentDesk />} />
+        <Route path="content" element={<Navigate to={crmPath("website")} replace />} />
       </Route>
     </Routes>
   );
@@ -136,7 +137,6 @@ function Crumb() {
     quotes: ["Quotes", "Commercial"],
     invoices: ["Invoices", "Commercial"],
     website: ["Content", "Website"],
-    content: ["Launch drafts", "Website"],
   };
   let title = "Dashboard";
   let group = "Home";
@@ -252,14 +252,6 @@ function NavIcon({ name }) {
         <path d="M12 3.8c2.2 2.4 3.4 5.2 3.4 8.2s-1.2 5.8-3.4 8.2c-2.2-2.4-3.4-5.2-3.4-8.2s1.2-5.8 3.4-8.2z" />
       </>
     ),
-    drafts: (
-      <>
-        <path d="M14 4H7.5A1.5 1.5 0 0 0 6 5.5v13A1.5 1.5 0 0 0 7.5 20h9a1.5 1.5 0 0 0 1.5-1.5V8z" />
-        <path d="M14 4v4h4" />
-        <path d="M9 13h6" />
-        <path d="M9 16h4" />
-      </>
-    ),
   };
   return (
     <svg className="nav-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -288,7 +280,6 @@ function DeskNav() {
       <NavLink to={crmPath("invoices")}><NavIcon name="invoices" />Invoices</NavLink>
       <p className="nav-label">Website</p>
       <NavLink to={crmPath("website")}><NavIcon name="content" />Content</NavLink>
-      <NavLink to={crmPath("content")}><NavIcon name="drafts" />Launch drafts</NavLink>
     </nav>
   );
 }
@@ -590,300 +581,10 @@ function countBy(leads, key, labels) {
   return rows;
 }
 
-function weekCounts(leads) {
-  const rows = [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  for (let index = 7; index >= 0; index -= 1) {
-    const start = new Date(today);
-    start.setDate(today.getDate() - index * 7);
-    rows.push({
-      start,
-      label: start.toLocaleDateString("en-AU", { day: "numeric", month: "short" }),
-      count: 0,
-    });
-  }
-  for (const lead of leads) {
-    const created = new Date(lead.createdAt);
-    if (Number.isNaN(created.getTime()) || created < rows[0].start) continue;
-    for (let index = rows.length - 1; index >= 0; index -= 1) {
-      if (created >= rows[index].start) {
-        rows[index].count += 1;
-        break;
-      }
-    }
-  }
-  return rows;
-}
-
-const CHART_COLORS = ["#7460ee", "#2962FF", "#4fc3f7", "#36bea6", "#fb8c00", "#f62d51", "#414755", "#26c6da"];
-
-function shortLabel(label) {
-  return label
-    .replace(" cleaning", "")
-    .replace("More than one of these", "More than one")
-    .replace("After production / night", "After production")
-    .replace("One-off or periodic", "One-off");
-}
-
-function Bars({ rows, label }) {
-  const active = rows.filter((row) => row.count > 0);
-  if (!active.length) return <ChartEmpty text="No leads yet" />;
-  const max = Math.max(...active.map((row) => row.count));
-  return (
-    <div className="bars" role="img" aria-label={label}>
-      {active.map((row) => (
-        <div className="bar-row" key={row.label}>
-          <span>{shortLabel(row.label)}</span>
-          <div className="bar-track">
-            <i style={{ width: `${Math.max((row.count / max) * 100, 8)}%` }} />
-          </div>
-          <strong>{row.count}</strong>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Columns({ rows, label }) {
-  const width = 840;
-  const height = 250;
-  const pad = { l: 36, r: 10, t: 22, b: 52 };
-  const total = rows.reduce((sum, row) => sum + row.count, 0);
-  const max = Math.max(total === 0 ? 4 : 1, ...rows.map((row) => row.count));
-  const innerW = width - pad.l - pad.r;
-  const innerH = height - pad.t - pad.b;
-  const slot = innerW / rows.length;
-  const barW = Math.min(36, slot * 0.46);
-  return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="col-chart" role="img" aria-label={label}>
-      {axisTicks(max).map((value) => {
-        const y = pad.t + innerH - (value / max) * innerH;
-        return (
-          <g key={value}>
-            <line className="line-grid" x1={pad.l} x2={width - pad.r} y1={y} y2={y} />
-            <text className="line-label" x={pad.l - 8} y={y + 4} textAnchor="end">{value}</text>
-          </g>
-        );
-      })}
-      {rows.map((row, index) => {
-        const heightPx = (row.count / max) * innerH;
-        const x = pad.l + index * slot + (slot - barW) / 2;
-        const y = pad.t + innerH - heightPx;
-        return (
-          <g key={row.label}>
-            {row.count > 0 && (
-              <>
-                <rect x={x} y={y} width={barW} height={Math.max(heightPx, 4)} rx="2" fill={row.muted ? "#b7c0cc" : "#7460ee"} />
-                <text className="col-count" x={x + barW / 2} y={y - 8} textAnchor="middle">{row.count}</text>
-              </>
-            )}
-            <text className="line-label" x={x + barW / 2} y={height - 22} textAnchor="middle">{stageName(row.label)}</text>
-          </g>
-        );
-      })}
-      {total === 0 && (
-        <text className="line-label" x={pad.l + innerW / 2} y={pad.t + innerH / 2} textAnchor="middle">No leads in the pipeline yet</text>
-      )}
-    </svg>
-  );
-}
-
-function stageName(label) {
-  return {
-    "Site Assessment": "Assessment",
-    "Proposal / Quote": "Proposal",
-    "Not Suitable": "Unsuitable",
-  }[label] || label;
-}
-
 function shortDate(value) {
   const date = new Date(`${value}T00:00:00`);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
-}
-
-function ChartEmpty({ text }) {
-  return (
-    <div className="chart-empty">
-      <span>{text}</span>
-    </div>
-  );
-}
-
-function Ring({ rows, center, caption }) {
-  const total = rows.reduce((sum, row) => sum + row.count, 0);
-  const shown = rows.filter((row) => row.count > 0);
-  if (!total) return <ChartEmpty text="No leads yet" />;
-  const radius = 48;
-  const circumference = 2 * Math.PI * radius;
-  const gap = shown.length > 1 ? 4 : 0;
-  const usable = Math.max(circumference - gap * shown.length, 0);
-  let offset = 0;
-  return (
-    <div className="ring-wrap" role="img" aria-label={shown.map((row) => `${row.label} ${row.count}`).join(", ")}>
-      <svg viewBox="0 0 140 140" className="ring-svg">
-        <circle cx="70" cy="70" r={radius} fill="none" stroke="#eef5f9" strokeWidth="16" />
-        {shown.map((row, index) => {
-          const length = (row.count / total) * usable;
-          const circle = (
-            <circle
-              key={row.label}
-              cx="70"
-              cy="70"
-              r={radius}
-              fill="none"
-              stroke={CHART_COLORS[index % CHART_COLORS.length]}
-              strokeWidth="16"
-              strokeLinecap="butt"
-              strokeDasharray={`${length} ${circumference - length}`}
-              strokeDashoffset={-offset}
-              transform="rotate(-90 70 70)"
-            />
-          );
-          offset += length + gap;
-          return circle;
-        })}
-        <text x="70" y="66" textAnchor="middle" className="ring-num">{center}</text>
-        <text x="70" y="84" textAnchor="middle" className="ring-cap">{caption}</text>
-      </svg>
-      <ul className="legend">
-        {shown.map((row, index) => (
-          <li key={row.label}>
-            <i style={{ background: CHART_COLORS[index % CHART_COLORS.length] }} />
-            <span>{shortLabel(row.label)}</span>
-            <strong>{row.count}</strong>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function WeekChart({ leads }) {
-  const rows = useMemo(() => weekCounts(leads), [leads]);
-  if (rows.every((row) => row.count === 0)) {
-    return <ChartEmpty text="No new leads in the last eight weeks" />;
-  }
-  const width = 760;
-  const height = 252;
-  const padL = 44;
-  const padR = 36;
-  const padT = 36;
-  const padB = 40;
-  const max = Math.max(1, ...rows.map((row) => row.count));
-  const innerW = width - padL - padR;
-  const innerH = height - padT - padB;
-  const step = rows.length > 1 ? innerW / (rows.length - 1) : 0;
-  const baseY = padT + innerH;
-  const yFor = (count) => baseY - (count / max) * innerH;
-  const points = rows.map((row, index) => ({
-    ...row,
-    x: padL + index * step,
-    y: yFor(row.count),
-  }));
-  const line = smoothLine(points);
-  const area = `${line} L${points[points.length - 1].x},${baseY} L${points[0].x},${baseY} Z`;
-  return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="line-chart" role="img" aria-label="New leads over the last eight weeks">
-      <defs>
-        <linearGradient id="week-area" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#7460ee" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="#7460ee" stopOpacity="0.02" />
-        </linearGradient>
-      </defs>
-      {axisTicks(max).map((value) => {
-        const y = yFor(value);
-        return (
-          <g key={value}>
-            <line x1={padL} x2={width - padR} y1={y} y2={y} className={value === 0 ? "line-axis" : "line-grid"} />
-            <text className="line-label" x={padL - 12} y={y + 4} textAnchor="end">{value}</text>
-          </g>
-        );
-      })}
-      <path d={area} className="line-area" />
-      <path d={line} className="line-stroke" />
-      {points.map((point, index) => {
-        const label = valueLabel(point, index, points, baseY);
-        return (
-          <g key={point.label}>
-            <text className="line-value" x={label.x} y={label.y} textAnchor={label.anchor}>{point.count}</text>
-            <circle cx={point.x} cy={point.y} r="4.5" />
-            <text className="line-label" x={point.x} y={height - 12} textAnchor="middle">{point.label}</text>
-            <title>{`${point.label}: ${point.count} new ${point.count === 1 ? "lead" : "leads"}`}</title>
-          </g>
-        );
-      })}
-    </svg>
-  );
-}
-
-function valueLabel(point, index, points, baseY) {
-  const prev = points[index - 1];
-  const next = points[index + 1];
-  const valley = prev && next && prev.y + 8 < point.y && next.y + 8 < point.y && baseY - point.y > 32;
-  if (valley) return { x: point.x, y: point.y + 18, anchor: "middle" };
-  if (index === 0) return { x: point.x + 9, y: point.y - 14, anchor: "start" };
-  const arrivingFromAbove = prev && prev.y < point.y - 12;
-  const leavingDownward = !next || next.y > point.y - 4;
-  if (arrivingFromAbove && leavingDownward) return { x: point.x + 10, y: point.y - 10, anchor: "start" };
-  return { x: point.x, y: point.y - 16, anchor: "middle" };
-}
-
-function axisTicks(max) {
-  const steps = max <= 4 ? max : 4;
-  const values = [];
-  for (let index = 0; index <= steps; index += 1) {
-    const value = Math.round((max * index) / steps);
-    if (!values.includes(value)) values.push(value);
-  }
-  return values;
-}
-
-function smoothLine(points) {
-  if (!points.length) return "";
-  if (points.length === 1) return `M${points[0].x},${points[0].y}`;
-  const n = points.length;
-  const slope = [];
-  for (let index = 0; index < n - 1; index += 1) {
-    const run = points[index + 1].x - points[index].x;
-    slope.push(run === 0 ? 0 : (points[index + 1].y - points[index].y) / run);
-  }
-  const tangent = slope.map((value, index) => {
-    if (index === 0) return value;
-    const previous = slope[index - 1];
-    return previous * value <= 0 ? 0 : (previous + value) / 2;
-  });
-  tangent.push(slope[n - 2]);
-  for (let index = 0; index < n - 1; index += 1) {
-    if (Math.abs(slope[index]) < 1e-6) {
-      tangent[index] = 0;
-      tangent[index + 1] = 0;
-      continue;
-    }
-    const a = tangent[index] / slope[index];
-    const b = tangent[index + 1] / slope[index];
-    const size = Math.hypot(a, b);
-    if (size > 3) {
-      const scale = 3 / size;
-      tangent[index] = scale * a * slope[index];
-      tangent[index + 1] = scale * b * slope[index];
-    }
-  }
-  let path = `M${roundChart(points[0].x)},${roundChart(points[0].y)}`;
-  for (let index = 0; index < n - 1; index += 1) {
-    const run = (points[index + 1].x - points[index].x) * 0.18;
-    const c1x = points[index].x + run;
-    const c1y = points[index].y + tangent[index] * run;
-    const c2x = points[index + 1].x - run;
-    const c2y = points[index + 1].y - tangent[index + 1] * run;
-    path += ` C${roundChart(c1x)},${roundChart(c1y)} ${roundChart(c2x)},${roundChart(c2y)} ${roundChart(points[index + 1].x)},${roundChart(points[index + 1].y)}`;
-  }
-  return path;
-}
-
-function roundChart(value) {
-  return Math.round(value * 10) / 10;
 }
 
 function useLeads(params) {
@@ -1429,100 +1130,6 @@ function LeadFields({ form, set, users = [], errors = {}, markRequired = false }
         </div>
       </section>
       {CLOSED_STAGES.includes(form.stage) && <p className="muted">This lead is closed.</p>}
-    </div>
-  );
-}
-
-function ContentDesk() {
-  const [posts, setPosts] = useState([]);
-  const [canEdit, setCanEdit] = useState(false);
-  const [notice, setNotice] = useState("");
-  const [error, setError] = useState("");
-  const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState({ title: "", text: "" });
-
-  useEffect(() => {
-    document.title = "Launch drafts · CRM";
-    api("/api/content/admin", { auth: true })
-      .then((data) => {
-        setCanEdit(data.canEdit);
-        setPosts(Array.isArray(data.settings.launchPosts) ? data.settings.launchPosts : []);
-      })
-      .catch((err) => setError(err.message));
-  }, []);
-
-  function update(index, key, value) {
-    setPosts((current) => current.map((post, item) => item === index ? { ...post, [key]: value } : post));
-  }
-
-  async function save(next, message) {
-    const missing = next.some((post) => blank(post.title));
-    if (missing) {
-      setError("Every draft needs a title.");
-      return;
-    }
-    setError("");
-    try {
-      await api("/api/settings", { method: "PUT", auth: true, body: { launchPosts: next } });
-      setPosts(next);
-      setNotice(message);
-      return true;
-    } catch (err) {
-      setError(err.message);
-      return false;
-    }
-  }
-
-  return (
-    <div className="content-desk">
-      <div className="crm-top">
-        <div>
-          <p className="eyebrow">Website</p>
-          <h1>Launch drafts</h1>
-        </div>
-      </div>
-      <p className="muted">Drafts for the LinkedIn company page. Add or edit them here. They are not published to the website.</p>
-      {notice && <p className="saved">{notice}</p>}
-      {error && <p className="note">{error}</p>}
-      {posts.map((post, index) => (
-        <article key={`${index}-${posts.length}`}>
-          <label>Title<input value={post.title} onChange={(event) => update(index, "title", event.target.value)} /></label>
-          <label>Draft<textarea rows={4} value={post.text} onChange={(event) => update(index, "text", event.target.value)} /></label>
-          {canEdit && (
-            <div className="row-actions">
-              <button className="solid-btn" type="button" onClick={() => save(posts, "Drafts saved.")}>Save</button>
-              <button className="ghost-btn dark" type="button" onClick={() => save(posts.filter((_, item) => item !== index), "Draft removed.")}>Remove</button>
-            </div>
-          )}
-        </article>
-      ))}
-      {canEdit && (
-        <button className="solid-btn" type="button" onClick={() => { setDraft({ title: "", text: "" }); setOpen(true); }}>Add a draft</button>
-      )}
-      <Drawer
-        open={open}
-        title="Add a draft"
-        onClose={() => setOpen(false)}
-        footer={<button className="solid-btn" type="button" onClick={async () => {
-          if (blank(draft.title)) {
-            setError("Every draft needs a title.");
-            return;
-          }
-          const saved = await save([...posts, { title: draft.title.trim(), text: draft.text }], "Draft added.");
-          if (saved) setOpen(false);
-        }}>Add draft</button>}
-      >
-        <div className="crm-form">
-          <label>
-            <span>Title<em aria-hidden="true">*</em></span>
-            <input value={draft.title} onChange={(event) => setDraft((current) => ({ ...current, title: event.target.value }))} />
-          </label>
-          <label>
-            <span>Draft</span>
-            <textarea rows={6} value={draft.text} onChange={(event) => setDraft((current) => ({ ...current, text: event.target.value }))} />
-          </label>
-        </div>
-      </Drawer>
     </div>
   );
 }
