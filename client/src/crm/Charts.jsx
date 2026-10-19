@@ -56,7 +56,7 @@ function ChartTip({ active, payload, label }) {
   );
 }
 
-function shortLabel(label) {
+export function shortLabel(label) {
   return label
     .replace(" cleaning", "")
     .replace("More than one of these", "More than one")
@@ -64,7 +64,7 @@ function shortLabel(label) {
     .replace("One-off or periodic", "One-off");
 }
 
-function stageName(label) {
+export function stageName(label) {
   return {
     "Site Assessment": "Assessment",
     "Proposal / Quote": "Proposal",

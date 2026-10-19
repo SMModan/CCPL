@@ -7,7 +7,7 @@ import { AuthContext } from "./auth";
 import { ClientDetail, Clients, Crew, Invoices, Jobs, Quotes, Schedule, Sites, money } from "./Operations";
 import { Desk, crmPath } from "./paths";
 import { blank, drop, emailOk, hasProblems } from "../validate";
-import { Bars, Columns, Ring, WeekChart } from "./Charts";
+import { Bars, Columns, Ring, WeekChart, shortLabel, stageName } from "./Charts";
 import Drawer from "./Drawer";
 import Website from "./Website";
 import "./crm.css";
