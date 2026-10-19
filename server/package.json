@@ -1,0 +1,13 @@
+{
+  "name": "comprehensive-cleaning-server",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "comprehensive-cleaning": "file:..",
+    "cors": "^2.8.5",
+    "embedded-postgres": "16.14.0-beta.17",
+    "express": "^4.21.2",
+    "multer": "^2.4.0",
+    "pg": "^8.23.1"
+  }
+}

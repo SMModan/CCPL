@@ -1,0 +1,14 @@
+{
+  "name": "comprehensive-cleaning",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "start": "node server/src/index.js",
+    "build": "npm run build --prefix client",
+    "test": "node --test e2e/flow.test.js"
+  }
+}

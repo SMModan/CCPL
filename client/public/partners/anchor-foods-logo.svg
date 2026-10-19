@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214 80" role="img">
+  <title>Anchor Foods</title>
+  <g fill="none" stroke="#082868" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="30" cy="15" r="5.5"/>
+    <path d="M30 20.5 V50"/>
+    <path d="M18 28 H42"/>
+    <path d="M30 50 C30 62 16 64 10 54"/>
+    <path d="M30 50 C30 62 44 64 50 54"/>
+    <path d="M10 54 V46"/>
+    <path d="M50 54 V46"/>
+  </g>
+  <text x="78" y="40" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#082868">Anchor</text>
+  <text x="78" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1c74d6" letter-spacing="3.2">FOODS</text>
+</svg>
