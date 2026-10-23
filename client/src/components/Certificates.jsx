@@ -46,7 +46,6 @@ export default function Certificates({ items = [] }) {
               )}
               <strong>{item.title}</strong>
               <em>{item.issuer}</em>
-              <em>{item.person}</em>
               <em>{item.date}</em>
               {item.detail && <p>{item.detail}</p>}
             </span>
@@ -69,10 +68,10 @@ export default function Certificates({ items = [] }) {
               <p>
                 <span>{slide.issuer}</span>
                 {slide.title}
-                <em className="photo-dialog-meta">{slide.person} · {slide.date}</em>
+                <em className="photo-dialog-meta">{slide.date}</em>
               </p>
               {slides.length > 1 && <em>{open + 1} / {slides.length}</em>}
-              {slide.file?.endsWith(".pdf") && <a href={slide.file} target="_blank" rel="noreferrer">PDF</a>}
+              {slide.file?.split("?")[0].endsWith(".pdf") && <a href={slide.file} target="_blank" rel="noreferrer">PDF</a>}
               <button type="button" className="photo-close" onClick={() => dialog.current?.close()} aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -83,7 +82,7 @@ export default function Certificates({ items = [] }) {
                   <span aria-hidden="true">‹</span>
                 </button>
               )}
-              <img key={slide.src} src={slide.src} alt={`${slide.title}, ${slide.person}`} />
+              <img key={slide.src} src={slide.src} alt={slide.title} />
               {slides.length > 1 && (
                 <button type="button" className="photo-nav next" onClick={() => setOpen((current) => (current + 1) % slides.length)} aria-label="Next certificate">
                   <span aria-hidden="true">›</span>

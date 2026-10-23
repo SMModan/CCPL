@@ -62,6 +62,15 @@ const SETTING_KEYS = new Set([
   "footerStaff",
   "logoImage",
   "partnersTitle",
+  "industryKicker",
+  "industryTitle",
+  "industryLede",
+  "industryMarkets",
+  "industryMarketNotes",
+  "industryWorkTitle",
+  "industryWork",
+  "industryAlsoTitle",
+  "industryAlso",
   "menuAboutText",
   "menuGalleryText",
   "menuResourcesText",
@@ -229,7 +238,7 @@ function parsePromiseImages(value) {
 async function readSettings(db) {
   const settings = {};
   for (const row of await many(db, "SELECT key, value FROM settings")) {
-    if (row.key === "ticks" || row.key === "promises" || row.key === "extraServices") settings[row.key] = parseList(row.value);
+    if (row.key === "ticks" || row.key === "promises" || row.key === "extraServices" || row.key === "industryMarkets" || row.key === "industryMarketNotes" || row.key === "industryWork") settings[row.key] = parseList(row.value);
     else if (row.key === "galleryCategories") settings[row.key] = parseCategories(row.value);
     else if (row.key === "promiseImages") settings[row.key] = parsePromiseImages(row.value);
     else settings[row.key] = row.value;
@@ -238,7 +247,7 @@ async function readSettings(db) {
 }
 
 function storeSetting(key, value) {
-  if (key === "ticks" || key === "promises" || key === "extraServices") return asList(value);
+  if (key === "ticks" || key === "promises" || key === "extraServices" || key === "industryMarkets" || key === "industryMarketNotes" || key === "industryWork") return asList(value);
   if (key === "galleryCategories") return JSON.stringify(parseCategories(JSON.stringify(value)));
   if (key === "promiseImages") return JSON.stringify(parsePromiseImages(JSON.stringify(value)));
   return block(value, key === "footer" || key.endsWith("Text") || key === "thankEmail" || key === "thankPhone" ? 2000 : 500);
@@ -308,7 +317,7 @@ export async function publicContent(db) {
     articleOut(row, false)
   );
   const gallery = await many(db, "SELECT id, src, alt, caption, category FROM gallery WHERE published = 1 ORDER BY sort_order, id");
-  const certificates = (await many(db, "SELECT * FROM certificates WHERE published = 1 ORDER BY sort_order, id")).map(certificateOut);
+  const certificates = (await many(db, "SELECT * FROM certificates WHERE published = 1 ORDER BY sort_order, id")).map((row) => certificateOut(row));
   const slides = await many(db, "SELECT src, alt, caption FROM slides WHERE published = 1 ORDER BY sort_order, id");
   const partners = await many(db, "SELECT name, src, url FROM partners WHERE published = 1 ORDER BY sort_order, id");
   return {
@@ -364,6 +373,15 @@ export async function publicContent(db) {
       workKicker: settings.workKicker || "On site",
       workTitle: settings.workTitle || "The work, by the kind of area.",
       workLink: settings.workLink || "Open the gallery",
+      industryKicker: settings.industryKicker || "Industry we work with",
+      industryTitle: settings.industryTitle || "Commercial cleaning for the food manufacturing industry.",
+      industryLede: settings.industryLede || "",
+      industryMarkets: Array.isArray(settings.industryMarkets) ? settings.industryMarkets : [],
+      industryMarketNotes: Array.isArray(settings.industryMarketNotes) ? settings.industryMarketNotes : [],
+      industryWorkTitle: settings.industryWorkTitle || "What the clean has to cover",
+      industryWork: Array.isArray(settings.industryWork) ? settings.industryWork : [],
+      industryAlsoTitle: settings.industryAlsoTitle || "Related plants",
+      industryAlso: settings.industryAlso || "",
     },
     labels: {
       navHome: settings.navHome || "Home",
@@ -429,7 +447,7 @@ export async function publicContent(db) {
       capAccountTitle: settings.capAccountTitle || "Accountability",
       capContact: settings.capContact || "Contact",
       capPdf: settings.capPdf || "Save as PDF",
-      partnersTitle: settings.partnersTitle || "Partners",
+      partnersTitle: settings.partnersTitle || "Industry we work with",
       navTraining: settings.navTraining || "Training",
       galleryAll: settings.galleryAll || "All",
       galleryFilters: settings.galleryFilters || "Photograph categories",
@@ -469,7 +487,7 @@ async function adminContent(db, user) {
       sortOrder: row.sort_order,
       published: Boolean(row.published),
     })),
-    certificates: (await many(db, "SELECT * FROM certificates ORDER BY sort_order, id")).map(certificateOut),
+    certificates: (await many(db, "SELECT * FROM certificates ORDER BY sort_order, id")).map((row) => certificateOut(row, true)),
     slides: (await many(db, "SELECT id, src, alt, caption, sort_order, published FROM slides ORDER BY sort_order, id")).map(slideOut),
     partners: (await many(db, "SELECT id, name, src, url, sort_order, published FROM partners ORDER BY sort_order, id")).map(partnerOut),
   };
@@ -486,12 +504,11 @@ function partnerOut(row) {
   };
 }
 
-function certificateOut(row) {
-  return {
+function certificateOut(row, includePerson = false) {
+  const certificate = {
     id: row.id,
     title: row.title,
     issuer: row.issuer,
-    person: row.person,
     date: row.issued,
     detail: row.detail || "",
     image: row.image || "",
@@ -500,6 +517,8 @@ function certificateOut(row) {
     sortOrder: row.sort_order,
     published: Boolean(row.published),
   };
+  if (includePerson) certificate.person = row.person || "";
+  return certificate;
 }
 
 function slideOut(row) {

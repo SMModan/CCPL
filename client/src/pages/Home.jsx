@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import Certificates from "../components/Certificates";
+import IndustryPanels from "../components/Industry";
 import EnquiryForm from "../components/EnquiryForm";
-import PartnerLogos from "../components/PartnerLogos";
 import { telHref, usePageMeta, useSiteContent } from "../site";
 
 export default function Home() {
   const content = useSiteContent();
-  const { company, home, services, steps, labels, articles, pages, gallery = [], categories = [], certificates = [], partners = [] } = content;
+  const { company, home, services, steps, labels, articles, pages, gallery = [], categories = [], certificates = [] } = content;
   usePageMeta(home.heroTitle, home.heroText);
   const heroPhoto = gallery.find((photo) => photo.category === "food") || gallery[0];
   const promiseImages = home.promiseImages?.length ? home.promiseImages : gallery.slice(0, 3).map((photo) => ({ src: photo.src, position: "center" }));
@@ -107,20 +107,19 @@ export default function Home() {
         </div>
       </section>
 
-      {partners.length > 0 && (
-        <section className="partners" aria-label={labels.partnersTitle || "Partners"}>
-          <div className="wrap">
-            <div className="section-head">
-              <div>
-                <p className="kicker">{labels.partnersTitle || "Partners"}</p>
-                <h2>Named in the company's own records.</h2>
-              </div>
-              {partners.length > 6 && <Link to="/partners">View all</Link>}
+      <section className="industry" aria-label={home.industryKicker || "Industry we work with"}>
+        <div className="wrap">
+          <div className="section-head">
+            <div>
+              <p className="kicker">{home.industryKicker || "Industry we work with"}</p>
+              <h2>{home.industryTitle || "Commercial cleaning for the food manufacturing industry."}</h2>
             </div>
-            <PartnerLogos partners={partners.slice(0, 6)} />
+            <Link to="/partners">The markets</Link>
           </div>
-        </section>
-      )}
+          {home.industryLede && <p className="lede industry-lede">{home.industryLede}</p>}
+          <IndustryPanels home={home} />
+        </div>
+      </section>
 
       <section className="work-home">
         <div className="wrap">

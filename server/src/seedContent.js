@@ -425,7 +425,34 @@ const EXTRA_SETTINGS = {
   missingGuideLink: "Back to resources",
   formSending: "Sending",
   logoImage: "/logo.png",
-  partnersTitle: "Partners",
+  partnersTitle: "Industry we work with",
+  industryKicker: "Industry we work with",
+  industryTitle: "Commercial cleaning for the food manufacturing industry.",
+  industryLede: "The primary market is food manufacturing and processing. This is commercial cleaning for that industry, scoped as plant sanitation rather than a general commercial clean.",
+  industryMarkets: JSON.stringify([
+    "Meat and smallgoods processing facilities",
+    "Abattoirs",
+    "Frozen food production plants",
+    "Prepared and quality foods manufacturers",
+  ]),
+  industryMarketNotes: JSON.stringify([
+    "Rooms, lines and floors",
+    "Holding and processing areas",
+    "Freezers, cold rooms and packing",
+    "Ready-to-eat and convenience lines",
+  ]),
+  industryAlsoTitle: "Related plants",
+  industryAlso: "Bakeries, dairy processors and seafood plants work under the same hygiene rules. A scope for one of those sites is written the same way: the plant, the window, and the food-safety checks.",
+  industryWorkTitle: "What the clean has to cover",
+  industryWork: JSON.stringify([
+    "HACCP and food-safety compliance cleaning",
+    "Allergen control and cross-contamination prevention",
+    "Sanitation standard operating procedures",
+    "Cold storage and freezer cleaning",
+    "Wash-down areas and high-pressure sanitation",
+    "Compliance with food-safety audits, including AQIS where a plant is export-registered",
+    "Microbial control, including Listeria and Salmonella",
+  ]),
   galleryEmpty: "Photographs will appear here once they are published in the CRM.",
   formContact: "Contact name",
   formCompany: "Company",
@@ -563,6 +590,10 @@ export async function ensureSettings(db) {
     if (!have.has(key)) await exec(db, "INSERT INTO settings (key, value) VALUES (?, ?)", [key, value]);
   }
   if (have.has("launchPosts")) await exec(db, "DELETE FROM settings WHERE key = ?", ["launchPosts"]);
+  if (have.get("partnersTitle") === "Partners") {
+    await exec(db, "UPDATE settings SET value = ? WHERE key = ?", ["Industry we work with", "partnersTitle"]);
+  }
+  await exec(db, "UPDATE partners SET published = 0");
 }
 
 const WORK_GROUPS = [

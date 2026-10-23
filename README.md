@@ -15,7 +15,7 @@ npm test
 npm run dev
 ```
 
-The site is http://127.0.0.1:5173 . The CRM is http://127.0.0.1:5173/crm . CRM option 2 is http://127.0.0.1:5173/crm2 . The API is http://127.0.0.1:4000.
+The site is http://127.0.0.1:5173 . The CRM is http://127.0.0.1:5173/crm . The API is http://127.0.0.1:4000.
 
 The public site is photographic, service-led, and built around the approved blue star logo.
 

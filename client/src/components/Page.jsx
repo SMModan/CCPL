@@ -1,14 +1,6 @@
-import { useOutletContext } from "react-router-dom";
-import Option2Page from "../option2/Page";
 import { usePageMeta } from "../site";
 
-export default function Page(props) {
-  const { design } = useOutletContext();
-  if (design === "option2") return <Option2Page {...props} />;
-  return <ClassicPage {...props} />;
-}
-
-function ClassicPage({ kicker, title, lede, image, imageAlt = "", titleLeads = false, children }) {
+export default function Page({ kicker, title, lede, image, imageAlt = "", titleLeads = false, children }) {
   usePageMeta(title, lede);
   return (
     <article className="sheet">

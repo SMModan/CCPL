@@ -120,7 +120,7 @@ export default function Shell() {
       <main id="content">
         {contentError && <p className="boot">{contentError}</p>}
         {!content && !contentError && <p className="boot">Loading the site…</p>}
-        {content && <Outlet context={{ content, base: "", design: "classic" }} />}
+        {content && <Outlet context={{ content, base: "" }} />}
       </main>
       <footer className="foot">
         <div className="wrap foot-grid">
@@ -149,7 +149,6 @@ export default function Shell() {
             <Link to="/privacy">{labels?.footerPrivacy || "Privacy"}</Link>
             <Link to="/terms">{labels?.footerTerms || "Terms"}</Link>
             <a href={crmHref()}>{labels?.footerStaff || "Staff sign in"}</a>
-            <Link to="/option2">Layout option 2</Link>
           </div>
         </div>
         <div className="wrap foot-base">© {new Date().getFullYear()} {company?.legalName || "Comprehensive Cleaning Pty Ltd"}</div>

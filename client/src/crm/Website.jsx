@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { api, publishSiteChange, replaceSlideImage, uploadGallery, uploadImage, uploadPartner, uploadSlide } from "../api";
+import { api, publishSiteChange, replaceSlideImage, uploadGallery, uploadImage, uploadSlide } from "../api";
 import { checkSlideFile, SLIDE_HINT, SLIDE_LIMITS } from "../slideRules";
-import { blank, drop, emailOk, hasProblems, websiteOk } from "../validate";
+import { blank, drop, emailOk, hasProblems } from "../validate";
 import Drawer from "./Drawer";
 
-const TABS = ["Details", "Homepage", "About", "Services", "Gallery", "Certificates", "Partners", "Guides", "Messages"];
+const TABS = ["Details", "Homepage", "About", "Services", "Gallery", "Certificates", "Industry", "Guides", "Messages"];
 const COMPANY_KEYS = ["legalName", "principal", "principalTitle", "email", "phone", "address", "location", "footer", "logoImage"];
 const HOME_KEYS = [
   "heroKicker", "heroTitle", "heroText", "heroImage", "heroAlt",
@@ -17,6 +17,7 @@ const HOME_KEYS = [
   "reelText", "reelLink", "reelLabel", "heroWork", "heroOpen",
   "certKicker", "certTitle", "certLede", "certLink",
   "workKicker", "workTitle", "workLink",
+  "industryKicker", "industryTitle", "industryLede", "industryMarkets", "industryWorkTitle", "industryWork",
   "galleryCategories",
 ];
 const WORD_KEYS = [
@@ -296,8 +297,8 @@ export default function Website() {
       {tab === "Certificates" && (
         <CertificatesEditor pack={pack} setPages={setPack} save={save} />
       )}
-      {tab === "Partners" && (
-        <PartnersEditor pack={pack} setSetting={setSetting} save={save} />
+      {tab === "Industry" && (
+        <IndustryEditor pack={pack} setSetting={setSetting} save={save} />
       )}
       {tab === "Guides" && (
         <GuidesEditor pack={pack} setPack={updatePack} setPages={setPack} save={save} />
@@ -832,114 +833,58 @@ function ServicesEditor({ pack, setPack, setPages, save }) {
   );
 }
 
-function PartnersEditor({ pack, setSetting, save }) {
-  const [draft, setDraft] = useState({ name: "", url: "", file: null });
+function IndustryEditor({ pack, setSetting, save }) {
+  const settings = pack.settings || {};
+  const markets = Array.isArray(settings.industryMarkets) ? settings.industryMarkets : [];
+  const notes = Array.isArray(settings.industryMarketNotes) ? settings.industryMarketNotes : [];
+  const work = Array.isArray(settings.industryWork) ? settings.industryWork : [];
   const [errors, setErrors] = useState({});
-  const [formKey, setFormKey] = useState(0);
-  const [open, setOpen] = useState(false);
-  const partners = pack.partners || [];
 
-  function setDraftField(key, value) {
-    setDraft((current) => ({ ...current, [key]: value }));
-    setErrors((current) => drop(current, key));
-  }
-
-  function addPartner() {
+  function saveIndustry() {
     const found = {};
-    if (blank(draft.name)) found.name = "Enter the partner name.";
-    if (!draft.file) found.file = "Choose a logo.";
-    if (!websiteOk(draft.url)) found.url = "The website needs to start with https://.";
+    if (blank(settings.industryKicker)) found.kicker = "Enter the label.";
+    if (blank(settings.industryTitle)) found.title = "Enter the heading.";
+    if (!markets.some((item) => String(item).trim())) found.markets = "Enter at least one market.";
     setErrors(found);
     if (hasProblems(found)) return;
-    save(async () => {
-      await uploadPartner(draft.file, { name: draft.name.trim(), url: draft.url.trim() });
-      setDraft({ name: "", url: "", file: null });
-      setErrors({});
-      setFormKey((value) => value + 1);
-      setOpen(false);
-    }, "Partner added.");
+    save(() => api("/api/settings", {
+      method: "PUT",
+      auth: true,
+      body: {
+        industryKicker: settings.industryKicker.trim(),
+        industryTitle: settings.industryTitle.trim(),
+        industryLede: (settings.industryLede || "").trim(),
+        industryMarkets: markets,
+        industryMarketNotes: notes,
+        industryWorkTitle: (settings.industryWorkTitle || "").trim(),
+        industryWork: work,
+        industryAlsoTitle: (settings.industryAlsoTitle || "").trim(),
+        industryAlso: (settings.industryAlso || "").trim(),
+      },
+    }), "Industry section saved.");
   }
 
   return (
     <div className="stack">
       <section className="panel crm-form">
-        <h2>Partner slider</h2>
-        <p className="muted">Logos move across the homepage. Add only a partner the company is allowed to show. Do not invent a name.</p>
-        <Field label="Heading" required error={errors.heading} value={pack.settings.partnersTitle || ""} onChange={(value) => { setSetting("partnersTitle", value); setErrors((current) => drop(current, "heading")); }} />
+        <h2>Industry we work with</h2>
+        <p className="muted">Shown on the homepage and the markets page. Icons follow the wording. Keep client and partner names off this section.</p>
+        <Field label="Label" required error={errors.kicker} value={settings.industryKicker || ""} onChange={(value) => { setSetting("industryKicker", value); setErrors((current) => drop(current, "kicker")); }} />
+        <Field label="Heading" required error={errors.title} value={settings.industryTitle || ""} onChange={(value) => { setSetting("industryTitle", value); setErrors((current) => drop(current, "title")); }} />
+        <Field label="Introduction" value={settings.industryLede || ""} onChange={(value) => setSetting("industryLede", value)} rows={4} />
+        <Field label="Markets, one line each" required error={errors.markets} value={markets.join("\n")} onChange={(value) => { setSetting("industryMarkets", splitLines(value)); setErrors((current) => drop(current, "markets")); }} rows={5} />
+        <Field label="A short line under each market, in the same order" value={notes.join("\n")} onChange={(value) => setSetting("industryMarketNotes", splitLines(value))} rows={5} />
+        <Field label="Work heading" value={settings.industryWorkTitle || ""} onChange={(value) => setSetting("industryWorkTitle", value)} />
+        <Field label="What the clean covers, one line each" value={work.join("\n")} onChange={(value) => setSetting("industryWork", splitLines(value))} rows={8} />
+        <Field label="Related plants heading" value={settings.industryAlsoTitle || ""} onChange={(value) => setSetting("industryAlsoTitle", value)} />
+        <Field label="Related plants" value={settings.industryAlso || ""} onChange={(value) => setSetting("industryAlso", value)} rows={3} />
         {pack.canEdit && (
           <div className="row-actions">
-            <button className="ghost-btn dark" type="button" onClick={() => {
-              if (blank(pack.settings.partnersTitle)) {
-                setErrors((current) => ({ ...current, heading: "Enter a heading." }));
-                return;
-              }
-              save(() => api("/api/settings", {
-                method: "PUT",
-                auth: true,
-                body: { partnersTitle: pack.settings.partnersTitle.trim() },
-              }), "Partner heading saved.");
-            }}>Save heading</button>
-            <button className="solid-btn" type="button" onClick={() => setOpen(true)}>Add a partner</button>
+            <button className="solid-btn" type="button" onClick={saveIndustry}>Save industry</button>
           </div>
         )}
       </section>
-      <Drawer
-        open={open}
-        title="Add a partner"
-        onClose={() => setOpen(false)}
-        footer={<button className="solid-btn" type="button" onClick={addPartner}>Add partner</button>}
-      >
-        <div className="crm-form" key={formKey}>
-          <Field label="Name" required error={errors.name} value={draft.name} onChange={(value) => setDraftField("name", value)} />
-          <Field label="Website, optional" error={errors.url} value={draft.url} onChange={(value) => setDraftField("url", value)} />
-          <label className={errors.file ? "is-invalid" : undefined}>
-            <span>Logo<em aria-hidden="true">*</em></span>
-            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => setDraftField("file", event.target.files?.[0] || null)} />
-            {errors.file && <small>{errors.file}</small>}
-          </label>
-          {hasProblems(errors) && (errors.name || errors.file || errors.url) && <p className="note">Fill the highlighted fields before adding a partner.</p>}
-        </div>
-      </Drawer>
-      <div className="gallery-admin">
-        {partners.map((item) => (
-          <PartnerCard key={item.id} item={item} canEdit={pack.canEdit} save={save} />
-        ))}
-        {partners.length === 0 && <p className="muted">No partner logos yet. The slider stays hidden until one is added.</p>}
-      </div>
     </div>
-  );
-}
-
-function PartnerCard({ item, canEdit, save }) {
-  const [name, setName] = useState(item.name);
-  const [url, setUrl] = useState(item.url || "");
-  const [errors, setErrors] = useState({});
-
-  function savePartner() {
-    const found = {};
-    if (blank(name)) found.name = "Enter the partner name.";
-    if (!websiteOk(url)) found.url = "The website needs to start with https://.";
-    setErrors(found);
-    if (hasProblems(found)) return;
-    save(() => api(`/api/partners/${item.id}`, {
-      method: "PATCH",
-      auth: true,
-      body: { name: name.trim(), url: url.trim(), published: item.published, sortOrder: item.sortOrder },
-    }), "Partner saved.");
-  }
-
-  return (
-    <article className="panel crm-form partner-card">
-      <img src={item.src} alt="" />
-      <Field label="Name" required error={errors.name} value={name} onChange={(value) => { setName(value); setErrors((current) => drop(current, "name")); }} />
-      <Field label="Website" error={errors.url} value={url} onChange={(value) => { setUrl(value); setErrors((current) => drop(current, "url")); }} />
-      {canEdit && (
-        <div className="row-actions">
-          <button className="solid-btn" type="button" onClick={savePartner}>Save</button>
-          <button className="ghost-btn dark" type="button" onClick={() => save(() => api(`/api/partners/${item.id}`, { method: "DELETE", auth: true }), "Partner removed.")}>Remove</button>
-        </div>
-      )}
-    </article>
   );
 }
 

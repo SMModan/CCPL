@@ -16,8 +16,6 @@ import Training from "./pages/Training";
 import Partners from "./pages/Partners";
 import Custom from "./pages/Custom";
 import CrmApp from "./crm/CrmApp";
-import Option2Shell from "./option2/Shell";
-import Option2Home from "./option2/Home";
 
 function publicRoutes(home) {
   return [
@@ -45,9 +43,6 @@ export default function App() {
     <Routes>
       <Route element={<Shell />}>
         {publicRoutes(<Home />)}
-      </Route>
-      <Route path="option2" element={<Option2Shell />}>
-        {publicRoutes(<Option2Home />)}
       </Route>
       <Route path="/crm/*" element={<CrmApp />} />
       <Route path="/crm2/*" element={<Navigate to="/crm" replace />} />
