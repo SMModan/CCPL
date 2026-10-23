@@ -109,7 +109,7 @@ p { margin: 0; }
 .enquiry label.is-invalid input,
 .enquiry label.is-invalid textarea,
 .enquiry label.is-invalid select { border-color: #c44747; background: #fff7f7; }
-.enquiry input, .enquiry select, .enquiry textarea { border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: #fff; }
+.enquiry input, .enquiry select, .enquiry textarea { width: 100%; max-width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: #fff; }
 .enquiry input:focus, .enquiry select:focus, .enquiry textarea:focus { outline: 2px solid rgba(8, 40, 104, .25); border-color: var(--accent); }
 .enquiry .btn { width: 100%; }
 .fine, .form-error { font-size: .9rem; }
@@ -266,12 +266,20 @@ p { margin: 0; }
   .nav-cta, .bar nav a.nav-cta { margin-left: 0; text-align: center; justify-content: center; }
   .hero-grid, .mosaic, .promises .promise-row, .news-row, .talk-grid, .page-hero-grid, .foot-grid, .trio, .insight-grid, .method-steps, .quote.flat, .service-row, .cert-grid, .work-cats, .work-grid, .band ol { grid-template-columns: 1fr; }
   .industry-markets, .industry-work ul { grid-template-columns: 1fr; }
-  .page-hero-grid > div, .page-hero-photo, .quote-intro, .quote-card, .talk-grid > div, .hero-grid > div, .hero-frame, .mosaic a:first-child { grid-column: auto; }
+  .hero-grid > div, .hero-frame, .page-hero-grid > div, .page-hero-photo, .mosaic a:first-child,
+  .talk-grid > div:first-child, .talk-grid > div:last-child,
+  .quote.flat > .quote-intro, .quote.flat > .quote-card { grid-column: 1 / -1; grid-row: auto; min-width: 0; }
+  .talk-grid, .quote.flat, .hero-grid, .page-hero-grid, .service-row { min-width: 0; }
+  .section-head { flex-wrap: wrap; align-items: flex-start; }
+  .section-head a, .service-row b { white-space: normal; }
+  .bar-meta .wrap { flex-wrap: wrap; row-gap: 2px; }
   .prose, .sheet:has(.page-hero-grid) .prose { max-width: none; }
-  .mosaic a:first-child { grid-row: auto; }
   .hero-frame img { height: auto; aspect-ratio: 4 / 3; }
   .service-row img { height: 180px; width: 100%; }
   .enquiry .grid-2 { grid-template-columns: 1fr; }
   h1, .hero h1 { max-width: none; }
+}
+@media (max-width: 480px) {
+  .wrap { width: min(1160px, calc(100% - 32px)); }
 }
 @media print { .bar, .foot, .btn, .to-top { display: none !important; } }
