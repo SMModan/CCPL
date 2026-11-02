@@ -99,7 +99,7 @@ test("website enquiry becomes a tracked lead", async () => {
 test("website content is served from the CRM", async () => {
   const content = await json("/api/content");
   assert.equal(content.status, 200);
-  assert.equal(content.data.company.email, "compclean@outlook.com");
+  assert.equal(content.data.company.email, "info@comprehensivecleaning.au");
   assert.equal(content.data.company.phone, "+61 407 389 985");
   assert.ok(content.data.gallery.length >= 1);
   assert.ok(content.data.services.some((service) => service.name === "Food manufacturing cleaning"));

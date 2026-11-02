@@ -10,6 +10,7 @@ import { hashPassword, openDatabase, verifyPassword } from "./db.js";
 import { exec, many, one } from "./pgdb.js";
 import { publishedServiceNames, registerContent } from "./contentRoutes.js";
 import { ensureClientFromWonLead, registerOps } from "./opsRoutes.js";
+import { enquiryInbox, sendMail } from "./mail.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -60,6 +61,7 @@ const LEAD_SELECT = `
 export function buildApp(db) {
   const app = express();
   app.disable("x-powered-by");
+  if (process.env.TRUST_PROXY === "1") app.set("trust proxy", 1);
   app.use(cors());
   app.use(express.json({ limit: "80kb" }));
 
@@ -512,6 +514,37 @@ async function createLead(db, input, { user = null, publicForm, addActivity, not
       now,
     ]);
   }
+  if (publicForm) {
+    const inbox = enquiryInbox();
+    const notice = [
+      `New website enquiry ${reference}`,
+      "",
+      `Name: ${contactName}`,
+      `Company: ${clean(input?.companyName, 160)}`,
+      `Email: ${email}`,
+      `Phone: ${phone}`,
+      `Service: ${service}`,
+      `Window: ${clean(input?.serviceWindow, 80)}`,
+      `Facility: ${clean(input?.facilityDetails, 2000)}`,
+      "",
+      notes,
+    ].join("\n");
+    let status = "queued";
+    try {
+      const result = await sendMail({ to: inbox, subject: `New enquiry ${reference}`, text: notice });
+      if (result.sent) status = "sent";
+    } catch (error) {
+      console.error("Enquiry email failed:", error?.message || error);
+    }
+    await exec(db, "INSERT INTO outbox (lead_id, to_email, subject, body, status, created_at) VALUES (?, ?, ?, ?, ?, ?)", [
+      id,
+      inbox,
+      `New enquiry ${reference}`,
+      notice,
+      status,
+      now,
+    ]);
+  }
   await notifyAdmins(
     id,
     `New enquiry ${reference}`,
@@ -533,8 +566,9 @@ export async function start(port = process.env.PORT || 4000) {
   }
   const db = await openDatabase();
   const app = buildApp(db);
-  app.listen(port, () => {
-    console.log(`CRM API listening on http://127.0.0.1:${port}`);
+  const host = process.env.HOST || "127.0.0.1";
+  app.listen(port, host, () => {
+    console.log(`CRM API listening on http://${host}:${port}`);
     console.log("PostgreSQL database is ready. Photographs are stored in the database.");
   });
 }

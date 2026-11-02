@@ -9,6 +9,7 @@
     "dev": "node scripts/dev.js",
     "start": "node server/src/index.js",
     "build": "npm install --include=dev --prefix client && npm install --prefix server && npm run build --prefix client",
+    "deploy": "node scripts/deploy.js",
     "test": "node --test e2e/flow.test.js"
   }
 }

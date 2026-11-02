@@ -34,7 +34,7 @@ export function issuerOf(company) {
   return {
     legalName: company?.legalName || "Comprehensive Cleaning Pty Ltd",
     location: company?.location || "Mandurah, Western Australia",
-    email: company?.email || "compclean@outlook.com",
+    email: company?.email || "info@comprehensivecleaning.au",
     phone: company?.phone || "+61 407 389 985",
     address: company?.address || "PO Box 6210, Mandurah North, WA 6210",
     logo: company?.logo || "/logo.png",

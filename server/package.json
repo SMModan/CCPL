@@ -8,6 +8,7 @@
     "embedded-postgres": "16.14.0-beta.17",
     "express": "^4.21.2",
     "multer": "^2.4.0",
+    "nodemailer": "^7.0.11",
     "pg": "^8.23.1"
   }
 }

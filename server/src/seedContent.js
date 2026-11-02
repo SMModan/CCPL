@@ -9,7 +9,7 @@ const settings = {
   location: "Mandurah, Western Australia",
   principal: "Hamilton Campbell",
   principalTitle: "Managing Director",
-  email: "compclean@outlook.com",
+  email: "info@comprehensivecleaning.au",
   phone: "+61 407 389 985",
   address: "PO Box 6210, Mandurah North, WA 6210",
   footer:

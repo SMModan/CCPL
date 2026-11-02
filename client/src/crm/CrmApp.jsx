@@ -307,7 +307,7 @@ function Who({ user, onLogout }) {
 function Login() {
   const auth = AuthContext.current;
   const navigate = useNavigate();
-  const [email, setEmail] = useState("david.simpson@comprehensivecleaning.local");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
@@ -342,7 +342,6 @@ function Login() {
       <div className="login-card">
         <Brand to="/" />
         <form noValidate onSubmit={onSubmit}>
-          <p className="login-kicker">Staff</p>
           <h1>Sign in</h1>
           <p className="login-lead">Leads, jobs, invoices, and the website.</p>
           <label className={errors.email ? "is-invalid" : undefined}>
@@ -358,19 +357,6 @@ function Login() {
           {error && <p className="note">{error}</p>}
           <button className="login-submit" type="submit">Sign in</button>
         </form>
-        <div className="demo">
-          <p>Demonstration access for this build. Choose an account to fill the form.</p>
-          <button type="button" onClick={() => { setEmail("david.simpson@comprehensivecleaning.local"); setPassword("Assessment-2026"); }}>
-            <strong>Administrator</strong>
-            <span>david.simpson@comprehensivecleaning.local</span>
-            <span>Assessment-2026</span>
-          </button>
-          <button type="button" onClick={() => { setEmail("operations@comprehensivecleaning.local"); setPassword("Pipeline-2026"); }}>
-            <strong>Sales</strong>
-            <span>operations@comprehensivecleaning.local</span>
-            <span>Pipeline-2026</span>
-          </button>
-        </div>
       </div>
     </main>
   );
