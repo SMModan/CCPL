@@ -6,15 +6,15 @@ const publicDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 
 const settings = {
   legalName: "Comprehensive Cleaning Pty Ltd",
-  location: "Mandurah, Western Australia",
+  location: "Perth, Western Australia",
   principal: "Hamilton Campbell",
   principalTitle: "Managing Director",
   email: "info@comprehensivecleaning.au",
-  phone: "+61 407 389 985",
-  address: "PO Box 6210, Mandurah North, WA 6210",
+  phone: "0400 791 933",
+  address: "Perth, Western Australia",
   footer:
-    "Comprehensive Cleaning Pty Ltd cleans food-processing plants, industrial sites, warehouses and commercial buildings. The company is based in Mandurah, Western Australia, and has worked in food-processing environments for 25 years.",
-  heroKicker: "Mandurah · Food plants, warehouses, commercial buildings",
+    "Comprehensive Cleaning Pty Ltd cleans food-processing plants, industrial sites, warehouses and commercial buildings. The company is based in Perth, Western Australia, and has worked in food-processing environments for 25 years.",
+  heroKicker: "Perth · Food plants, warehouses, commercial buildings",
   heroTitle: "The clean is agreed before anyone is on the tools.",
   heroText:
     "Comprehensive Cleaning walks the facility, writes what is in and what is out, then cleans to that window. Food manufacturing, industrial sites, warehouses and offices.",
@@ -148,11 +148,11 @@ const pages = [
   {
     slug: "about",
     kicker: "About",
-    title: "A Mandurah company for food plants and the buildings around them.",
-    lede: "Comprehensive Cleaning Pty Ltd is led by Hamilton Campbell, Managing Director. The company is based in Mandurah and has worked in food-processing environments for 25 years.",
+    title: "A Perth company for food plants and the buildings around them.",
+    lede: "Comprehensive Cleaning Pty Ltd is led by Hamilton Campbell, Managing Director. The company is based in Perth, Western Australia and has worked in food-processing environments for 25 years.",
     image: "/uploads/rfp/p11-Im2.jpg",
     imageAlt: "Two crew members in aprons after a wash-down",
-    body: `Comprehensive Cleaning has worked in food-processing environments for 25 years, from a base in Mandurah, Western Australia. The work covers food plants, including meat processing, and the industrial, warehouse and commercial areas that sit with those sites.
+    body: `Comprehensive Cleaning has worked in food-processing environments for 25 years, from a base in Perth, Western Australia. The work covers food plants, including meat processing, and the industrial, warehouse and commercial areas that sit with those sites.
 
 Daily sanitation, equipment cleaning, periodic deep cleans, amenities and on-demand callouts are scoped before a crew starts. A supervisor is on the shift and is the contact for the site while the crew is there. Staff are trained in food safety, sanitation and the protective equipment the site requires.
 
@@ -577,7 +577,81 @@ export async function ensurePages(db) {
   }
 }
 
+const PLACE = "Perth, Western Australia";
+
+export function withoutMandurah(value) {
+  const original = String(value ?? "");
+  if (!/mandurah|407[\s-]*389[\s-]*985|po box 6210|based in western australia|a base in western australia/i.test(original)) {
+    return original;
+  }
+  let text = original;
+  text = text.replace(/(?:\+?61[\s-]*)?0?407[\s-]*389[\s-]*985/g, "0400 791 933");
+  text = text.replace(/PO Box 6210,\s*Mandurah North,\s*(?:WA|Western Australia)\s*6210/gi, PLACE);
+  text = text.replace(/PO Box 6210,\s*(?:WA|Western Australia)\s*6210/gi, PLACE);
+  text = text.replace(/Mandurah,\s*Western Australia/gi, PLACE);
+  text = text.replace(/\bbased in Mandurah\b/gi, `based in ${PLACE}`);
+  text = text.replace(/\ba base in Mandurah\b/gi, `a base in ${PLACE}`);
+  text = text.replace(/\bbased in (?!Perth,\s*)Western Australia/gi, `based in ${PLACE}`);
+  text = text.replace(/\ba base in (?!Perth,\s*)Western Australia/gi, `a base in ${PLACE}`);
+  text = text.replace(/A Mandurah company/g, "A Perth company");
+  text = text.replace(/Mandurah North/gi, "Perth");
+  text = text.replace(/Mandurah\s*·\s*/gi, "Perth · ");
+  text = text.replace(/Mandurah/gi, "Perth");
+  text = text.replace(/(Perth, Western Australia)(?:,\s*Western Australia)+/g, "$1");
+  return text.replace(/[ ]{2,}/g, " ").replace(/\s+([.,])/g, "$1").trim();
+}
+
+const STORED_COPY = [
+  ["settings", "key", ["value"]],
+  ["pages", "slug", ["kicker", "title", "lede", "image_alt", "body"]],
+  ["articles", "id", ["title", "kicker", "lede", "body"]],
+  ["services", "id", ["name", "short", "summary", "applies", "scope", "need"]],
+  ["steps", "id", ["title", "text"]],
+  ["gallery", "id", ["alt", "caption"]],
+  ["slides", "id", ["alt", "caption"]],
+  ["certificates", "id", ["title", "issuer", "detail"]],
+  ["leads", "id", ["facility_details", "notes"]],
+  ["clients", "id", ["suburb", "notes"]],
+  ["sites", "id", ["address", "access_notes"]],
+  ["jobs", "id", ["title", "notes"]],
+  ["quotes", "id", ["title", "notes"]],
+  ["invoices", "id", ["notes"]],
+];
+
+export async function correctStoredCopy(db) {
+  for (const [table, id, fields] of STORED_COPY) {
+    const rows = await many(db, `SELECT ${id}, ${fields.join(", ")} FROM ${table}`);
+    for (const row of rows) {
+      const next = {};
+      for (const field of fields) {
+        const value = withoutMandurah(row[field]);
+        if (value !== String(row[field] ?? "")) next[field] = value;
+      }
+      if (table === "settings" && row.key === "phone") {
+        const digits = String(next.value ?? row.value ?? "").replace(/\D/g, "");
+        if (digits === "61407389985" || digits === "0407389985" || digits === "407389985") next.value = "0400 791 933";
+      }
+      if (table === "settings" && row.key === "location") {
+        const current = String(next.value ?? row.value ?? "").trim();
+        if (/^(western australia|wa|perth)$/i.test(current)) next.value = PLACE;
+      }
+      if (table === "settings" && row.key === "address") {
+        const current = String(next.value ?? row.value ?? "");
+        if (/mandurah|6210|po box/i.test(current)) next.value = PLACE;
+      }
+      const keys = Object.keys(next);
+      if (!keys.length) continue;
+      await exec(
+        db,
+        `UPDATE ${table} SET ${keys.map((key) => `${key} = ?`).join(", ")} WHERE ${id} = ?`,
+        [...keys.map((key) => next[key]), row[id]]
+      );
+    }
+  }
+}
+
 export async function ensureSettings(db) {
+  await correctStoredCopy(db);
   const rows = await many(db, "SELECT key, value FROM settings");
   const have = new Map(rows.map((row) => [row.key, row.value]));
   const missing = { ...EXTRA_SETTINGS };

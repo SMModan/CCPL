@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { buildApp } from "../server/src/index.js";
 import { openDatabase } from "../server/src/db.js";
 import { closeDatabase } from "../server/src/pgdb.js";
+import { withoutMandurah } from "../server/src/seedContent.js";
 
 const db = await openDatabase(":memory:");
 const app = buildApp(db);
@@ -24,6 +25,29 @@ async function json(path, { method = "GET", body, token } = {}) {
   const data = text ? JSON.parse(text) : null;
   return { status: response.status, data, text };
 }
+
+test("Mandurah copy and the old mobile are rewritten to Perth", () => {
+  assert.equal(withoutMandurah("Mandurah, Western Australia"), "Perth, Western Australia");
+  assert.equal(withoutMandurah("+61 407 389 985"), "0400 791 933");
+  assert.equal(withoutMandurah("0407 389 985"), "0400 791 933");
+  assert.equal(withoutMandurah("PO Box 6210, Mandurah North, WA 6210"), "Perth, Western Australia");
+  assert.equal(withoutMandurah("PO Box 6210, WA 6210"), "Perth, Western Australia");
+  assert.equal(withoutMandurah("Mandurah · Food plants, warehouses, commercial buildings"), "Perth · Food plants, warehouses, commercial buildings");
+  assert.equal(
+    withoutMandurah("The company is based in Mandurah, Western Australia, and has worked in food-processing environments for 25 years."),
+    "The company is based in Perth, Western Australia, and has worked in food-processing environments for 25 years."
+  );
+  assert.equal(withoutMandurah("A Mandurah company for food plants and the buildings around them."), "A Perth company for food plants and the buildings around them.");
+  assert.equal(
+    withoutMandurah("The company is based in Mandurah and has worked in food-processing environments for 25 years."),
+    "The company is based in Perth, Western Australia and has worked in food-processing environments for 25 years."
+  );
+  assert.equal(
+    withoutMandurah("from a base in Mandurah, Western Australia."),
+    "from a base in Perth, Western Australia."
+  );
+  assert.equal(withoutMandurah("St John Ambulance Western Australia"), "St John Ambulance Western Australia");
+});
 
 test("website enquiry becomes a tracked lead", async () => {
   const company = `E2E Cold Store ${Date.now()}`;
@@ -100,7 +124,11 @@ test("website content is served from the CRM", async () => {
   const content = await json("/api/content");
   assert.equal(content.status, 200);
   assert.equal(content.data.company.email, "info@comprehensivecleaning.au");
-  assert.equal(content.data.company.phone, "+61 407 389 985");
+  assert.equal(content.data.company.phone, "0400 791 933");
+  assert.equal(content.data.company.location, "Perth, Western Australia");
+  assert.equal(content.data.company.address, "Perth, Western Australia");
+  assert.equal(content.data.home.heroKicker, "Perth · Food plants, warehouses, commercial buildings");
+  assert.doesNotMatch(JSON.stringify(content.data), /Mandurah|407[\s-]*389[\s-]*985|PO Box 6210/);
   assert.ok(content.data.gallery.length >= 1);
   assert.ok(content.data.services.some((service) => service.name === "Food manufacturing cleaning"));
 

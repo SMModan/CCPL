@@ -6,6 +6,7 @@ import {
   formatInvoiceDate,
   formatInvoiceMoney,
   invoiceTone,
+  distinctLines,
   issuerOf,
   lineFor,
 } from "./invoiceDoc";
@@ -105,7 +106,7 @@ export function InvoiceSheet({ invoice, client, company, onClose }) {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const billLines = [bill.contact, bill.suburb, bill.email, bill.phone].filter(Boolean);
-  const fromLines = [issuer.address, issuer.location, issuer.phone, issuer.email].filter(Boolean);
+  const fromLines = distinctLines([issuer.address, issuer.location, issuer.phone, issuer.email]);
 
   useEffect(() => {
     function onKey(event) {

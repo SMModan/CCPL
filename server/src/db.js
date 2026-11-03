@@ -88,7 +88,7 @@ async function ensureDemoLeads(db) {
   const sales = await one(db, "SELECT id, name FROM users WHERE lower(email) = lower(?)", ["operations@comprehensivecleaning.local"]);
   const note = "Demonstration record for the CRM. Not a real enquiry.";
   const leads = [
-    ["Helen Brooks", "Peel Cold Rooms", "helen.brooks@demo.invalid", "0412 100 201", "Chilled packing room in Mandurah. Production finishes at 10pm.", "Food manufacturing cleaning", "After production / night", "Website", null, 480000, "New", null, "Call and acknowledge the enquiry", 0, -1, "Website form, no one has called yet."],
+    ["Helen Brooks", "Peel Cold Rooms", "helen.brooks@demo.invalid", "0412 100 201", "Chilled packing room. Production finishes at 10pm.", "Food manufacturing cleaning", "After production / night", "Website", null, 480000, "New", null, "Call and acknowledge the enquiry", 0, -1, "Website form, no one has called yet."],
     ["Mark Adey", "Harbour Warehousing", "mark.adey@demo.invalid", "0413 220 418", "High-bay warehouse, forklifts on the floor until Friday afternoon.", "Industrial & warehouse cleaning", "Weekend shutdown", "Phone", sales?.id ?? null, 1260000, "New", shiftDate(-1).slice(0, 10), "Confirm weekend access and induction", 1, -3, "Phoned in. Waiting on the site supervisor."],
     ["Priya Nair", "Estuary Offices", "priya.nair@demo.invalid", "0418 554 902", "Two-storey office and staff amenities, occupied through the day.", "Commercial & office cleaning", "Business hours", "Email", admin?.id ?? null, 640000, "Contacted", shiftDate(-6).slice(0, 10), "Send the scope notes from the call", -3, -12, "Spoke on Tuesday. Follow-up is overdue."],
     ["Owen Clarke", "Inlet Grain Processors", "owen.clarke@demo.invalid", "0407 881 334", "Dry processing hall and staff amenities. Gap between the morning and afternoon shifts.", "Food manufacturing cleaning", "Between shifts", "LinkedIn", sales?.id ?? null, 1850000, "Contacted", shiftDate(-4).slice(0, 10), "Ask for the current cleaning specification", 6, -18, "LinkedIn message, then a short call."],
@@ -168,14 +168,14 @@ async function ensureOperations(db) {
   }
 
   const note = "Demonstration record for the CRM.";
-  const peel = await addClient("Peel Protein Foods", "Angela Moss", "angela.moss@demo.invalid", "0419 300 672", "Mandurah", "Active", `${note} Monthly night clean of the processing room and amenities.`);
+  const peel = await addClient("Peel Protein Foods", "Angela Moss", "angela.moss@demo.invalid", "0419 300 672", "Western Australia", "Active", `${note} Monthly night clean of the processing room and amenities.`);
   const estuary = await addClient("Estuary Logistics", "Tom Reid", "tom.reid@demo.invalid", "0428 551 203", "Greenfields", "Active", `${note} Aisle clean between the day and night shifts.`);
-  const workshop = await addClient("Workshop Street Offices", "Chris Lang", "chris.lang@demo.invalid", "0402 448 915", "Mandurah", "Onboarding", `${note} Quote sent. Waiting on the facilities manager.`);
+  const workshop = await addClient("Workshop Street Offices", "Chris Lang", "chris.lang@demo.invalid", "0402 448 915", "Western Australia", "Onboarding", `${note} Quote sent. Waiting on the facilities manager.`);
 
-  const processing = await addSite(peel, "Processing room", "Gordon Road, Mandurah", "Food manufacturing cleaning", "Nightly", "Production finishes at 10pm. The crew starts once the line is clear.");
-  const amenities = await addSite(peel, "Staff amenities", "Gordon Road, Mandurah", "Food manufacturing cleaning", "Nightly", "Cleaned with the night crew.");
+  const processing = await addSite(peel, "Processing room", "Gordon Road", "Food manufacturing cleaning", "Nightly", "Production finishes at 10pm. The crew starts once the line is clear.");
+  const amenities = await addSite(peel, "Staff amenities", "Gordon Road", "Food manufacturing cleaning", "Nightly", "Cleaned with the night crew.");
   const aisles = await addSite(estuary, "Warehouse aisles", "Pinjarra Road, Greenfields", "Industrial & warehouse cleaning", "Weekly", "Forklifts need to be parked before the crew goes in.");
-  const office = await addSite(workshop, "Open-plan office", "Workshop Street, Mandurah", "Commercial & office cleaning", "Weekly", "Occupied through the day. Clean after 5:30pm.");
+  const office = await addSite(workshop, "Open-plan office", "Workshop Street", "Commercial & office cleaning", "Weekly", "Occupied through the day. Clean after 5:30pm.");
 
   const sam = await addCrew("Sam Pereira", "Supervisor", "0412 880 014", "On shift");
   const aisha = await addCrew("Aisha Khan", "Leading hand", "0413 662 441", "On shift");

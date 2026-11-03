@@ -33,10 +33,10 @@ const WIDTHS = {
 export function issuerOf(company) {
   return {
     legalName: company?.legalName || "Comprehensive Cleaning Pty Ltd",
-    location: company?.location || "Mandurah, Western Australia",
+    location: company?.location || "Perth, Western Australia",
     email: company?.email || "info@comprehensivecleaning.au",
-    phone: company?.phone || "+61 407 389 985",
-    address: company?.address || "PO Box 6210, Mandurah North, WA 6210",
+    phone: company?.phone || "0400 791 933",
+    address: company?.address || "Perth, Western Australia",
     logo: company?.logo || "/logo.png",
   };
 }
@@ -180,9 +180,19 @@ function fromTop(distance, height = 0) {
   return PAGE_H - distance - height;
 }
 
+export function distinctLines(lines) {
+  const seen = new Set();
+  return lines.filter((line) => {
+    const key = String(line || "").trim().toLowerCase();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function partyLines(party, kind) {
-  if (kind === "from") return [party.legalName, party.address, party.location, party.phone, party.email].filter(Boolean);
-  return [party.name, party.contact, party.suburb, party.email, party.phone].filter(Boolean);
+  if (kind === "from") return distinctLines([party.legalName, party.address, party.location, party.phone, party.email]);
+  return distinctLines([party.name, party.contact, party.suburb, party.email, party.phone]);
 }
 
 export function buildInvoicePdf({ invoice, client, company, image }) {

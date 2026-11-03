@@ -30,6 +30,13 @@ export function telHref(phone = "") {
   return digits ? `tel:${digits}` : "";
 }
 
+export function placeLines(company = {}) {
+  const address = String(company.address || "").trim();
+  const location = String(company.location || "").trim();
+  if (address && location && address.toLowerCase() === location.toLowerCase()) return [location];
+  return [address, location].filter(Boolean);
+}
+
 export function crmHref() {
   return "/crm";
 }

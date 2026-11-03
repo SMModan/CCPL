@@ -1,6 +1,6 @@
 import EnquiryForm from "../components/EnquiryForm";
 import Page from "../components/Page";
-import { pageOf, telHref, useSiteContent } from "../site";
+import { pageOf, placeLines, telHref, useSiteContent } from "../site";
 
 export default function Contact() {
   const content = useSiteContent();
@@ -16,8 +16,7 @@ export default function Contact() {
           <p>{company.legalName}</p>
           {company.phone && <p><a href={telHref(company.phone)}>{company.phone}</a></p>}
           {company.email && <p><a href={`mailto:${company.email}`}>{company.email}</a></p>}
-          {company.address && <p>{company.address}</p>}
-          {company.location && <p>{company.location}</p>}
+          {placeLines(company).map((line) => <p key={line}>{line}</p>)}
           {page.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
         <div className="quote-card">

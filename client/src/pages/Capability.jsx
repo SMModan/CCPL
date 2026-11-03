@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Page from "../components/Page";
-import { fillCopy, useSiteContent, useSitePath } from "../site";
+import { fillCopy, placeLines, useSiteContent, useSitePath } from "../site";
 
 export default function Capability() {
   const { company, services, steps, pages, labels } = useSiteContent();
@@ -56,9 +56,8 @@ export default function Capability() {
         <h2>{labels.capContact}</h2>
         <p>
           {company.phone && <>{company.phone}<br /></>}
-          {company.email}<br />
-          {company.address}<br />
-          {company.location}
+          {company.email && <>{company.email}<br /></>}
+          {placeLines(company).map((line) => <span key={line}>{line}<br /></span>)}
         </p>
         <button className="btn solid" type="button" onClick={() => window.print()}>{labels.capPdf}</button>
       </div>
