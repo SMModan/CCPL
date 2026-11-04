@@ -94,7 +94,8 @@ export default function IndustryPanels({ home, heading = "h3" }) {
       )}
       {work.length > 0 && (
         <div className="industry-work">
-          <Title>{home.industryWorkTitle || "What the clean has to cover"}</Title>
+          <Title>{home.industryWorkTitle || "Scope of Cleaning Requirements"}</Title>
+          {home.industryWorkIntro && <p>{home.industryWorkIntro}</p>}
           <ul>
             {work.map((item) => (
               <li key={item}>

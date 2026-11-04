@@ -17,7 +17,7 @@ const HOME_KEYS = [
   "reelText", "reelLink", "reelLabel", "heroWork", "heroOpen",
   "certKicker", "certTitle", "certLede", "certLink",
   "workKicker", "workTitle", "workLink",
-  "industryKicker", "industryTitle", "industryLede", "industryMarkets", "industryWorkTitle", "industryWork",
+  "industryKicker", "industryTitle", "industryLede", "industryMarkets", "industryWorkTitle", "industryWorkIntro", "industryWork",
   "galleryCategories",
 ];
 const WORD_KEYS = [
@@ -857,6 +857,7 @@ function IndustryEditor({ pack, setSetting, save }) {
         industryMarkets: markets,
         industryMarketNotes: notes,
         industryWorkTitle: (settings.industryWorkTitle || "").trim(),
+        industryWorkIntro: (settings.industryWorkIntro || "").trim(),
         industryWork: work,
         industryAlsoTitle: (settings.industryAlsoTitle || "").trim(),
         industryAlso: (settings.industryAlso || "").trim(),
@@ -867,7 +868,7 @@ function IndustryEditor({ pack, setSetting, save }) {
   return (
     <div className="stack">
       <section className="panel crm-form">
-        <h2>Industry we work with</h2>
+        <h2>Industries we serve</h2>
         <p className="muted">Shown on the homepage and the markets page. Icons follow the wording. Keep client and partner names off this section.</p>
         <Field label="Label" required error={errors.kicker} value={settings.industryKicker || ""} onChange={(value) => { setSetting("industryKicker", value); setErrors((current) => drop(current, "kicker")); }} />
         <Field label="Heading" required error={errors.title} value={settings.industryTitle || ""} onChange={(value) => { setSetting("industryTitle", value); setErrors((current) => drop(current, "title")); }} />
@@ -875,6 +876,7 @@ function IndustryEditor({ pack, setSetting, save }) {
         <Field label="Markets, one line each" required error={errors.markets} value={markets.join("\n")} onChange={(value) => { setSetting("industryMarkets", splitLines(value)); setErrors((current) => drop(current, "markets")); }} rows={5} />
         <Field label="A short line under each market, in the same order" value={notes.join("\n")} onChange={(value) => setSetting("industryMarketNotes", splitLines(value))} rows={5} />
         <Field label="Work heading" value={settings.industryWorkTitle || ""} onChange={(value) => setSetting("industryWorkTitle", value)} />
+        <Field label="Line under the work heading" value={settings.industryWorkIntro || ""} onChange={(value) => setSetting("industryWorkIntro", value)} />
         <Field label="What the clean covers, one line each" value={work.join("\n")} onChange={(value) => setSetting("industryWork", splitLines(value))} rows={8} />
         <Field label="Related plants heading" value={settings.industryAlsoTitle || ""} onChange={(value) => setSetting("industryAlsoTitle", value)} />
         <Field label="Related plants" value={settings.industryAlso || ""} onChange={(value) => setSetting("industryAlso", value)} rows={3} />

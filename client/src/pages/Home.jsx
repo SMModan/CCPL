@@ -107,15 +107,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="industry" aria-label={home.industryKicker || "Industry we work with"}>
+      <section className="industry" aria-label={home.industryKicker || "Industries We Serve"}>
         <div className="wrap">
           <div className="section-head">
             <div>
-              <p className="kicker">{home.industryKicker || "Industry we work with"}</p>
-              <h2>{home.industryTitle || "Commercial cleaning for the food manufacturing industry."}</h2>
+              <p className="kicker">{home.industryKicker || "Industries We Serve"}</p>
+              <h2>{home.industryTitle || "Specialist commercial cleaning for the food manufacturing industry."}</h2>
             </div>
-            <Link to="/partners">The markets</Link>
           </div>
+          <p className="kicker industry-markets-label"><Link to="/partners">Our Core Markets</Link></p>
           {home.industryLede && <p className="lede industry-lede">{home.industryLede}</p>}
           <IndustryPanels home={home} />
         </div>
@@ -152,7 +152,7 @@ export default function Home() {
           <div className="wrap">
             <div className="section-head">
               <h2>{pages?.resources?.title || labels.navResources}</h2>
-              <Link to="/resources">All notes</Link>
+              <Link to="/resources">All Notes</Link>
             </div>
             <div className="news-row">
               {articles.slice(0, 3).map((article) => (

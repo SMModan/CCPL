@@ -10,8 +10,8 @@ export default function Partners() {
 
   return (
     <Page
-      kicker={home.industryKicker || "Industry we work with"}
-      title={home.industryTitle || "Commercial cleaning for the food manufacturing industry."}
+      kicker={home.industryKicker || "Industries We Serve"}
+      title={home.industryTitle || "Specialist commercial cleaning for the food manufacturing industry."}
       lede={home.industryLede || ""}
     >
       <IndustryPanels home={home} heading="h2" />

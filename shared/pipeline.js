@@ -12,9 +12,9 @@ export const STAGES = [
 export const CLOSED_STAGES = ["Won", "Lost", "Not Suitable"];
 
 export const SERVICES = [
-  "Food manufacturing cleaning",
-  "Industrial & warehouse cleaning",
-  "Commercial & office cleaning",
+  "Food Manufacturing Cleaning",
+  "Industrial & Warehouse Cleaning",
+  "Commercial & Office Cleaning",
   "More than one of these",
   "Not sure yet",
 ];

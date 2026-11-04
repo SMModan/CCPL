@@ -59,7 +59,7 @@ test("website enquiry becomes a tracked lead", async () => {
       email: "pat@example.com",
       phone: "0400000000",
       facilityDetails: "Chiller and packing room",
-      service: "Food manufacturing cleaning",
+      service: "Food Manufacturing Cleaning",
       serviceWindow: "After production / night",
       message: "Need a walk-through next week.",
     },
@@ -130,7 +130,8 @@ test("website content is served from the CRM", async () => {
   assert.equal(content.data.home.heroKicker, "Perth · Food plants, warehouses, commercial buildings");
   assert.doesNotMatch(JSON.stringify(content.data), /Mandurah|407[\s-]*389[\s-]*985|PO Box 6210/);
   assert.ok(content.data.gallery.length >= 1);
-  assert.ok(content.data.services.some((service) => service.name === "Food manufacturing cleaning"));
+  assert.equal(content.data.home.heroTitle, "The scope of cleaning is agreed upon and finalized before any work begins.");
+  assert.ok(content.data.services.some((service) => service.name === "Food Manufacturing Cleaning"));
 
   const locked = await json("/api/settings", { method: "PUT", body: { phone: "0400000000" } });
   assert.equal(locked.status, 401);
@@ -183,7 +184,7 @@ test("a won lead opens a client, site, and job", async () => {
       email: `ada.${Date.now()}@example.com`,
       phone: "0400111222",
       facilityDetails: "Chiller hall",
-      service: "Food manufacturing cleaning",
+      service: "Food Manufacturing Cleaning",
       serviceWindow: "After production / night",
       source: "Phone",
       value: 9000,

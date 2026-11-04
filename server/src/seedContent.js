@@ -13,32 +13,32 @@ const settings = {
   phone: "0400 791 933",
   address: "Perth, Western Australia",
   footer:
-    "Comprehensive Cleaning Pty Ltd cleans food-processing plants, industrial sites, warehouses and commercial buildings. The company is based in Perth, Western Australia, and has worked in food-processing environments for 25 years.",
+    "Comprehensive Cleaning Pty Ltd provides specialist cleaning services to food-processing plants, industrial sites, warehouses and commercial buildings. Based in Perth, Western Australia, the company brings 32 years of experience in food-processing environments.",
   heroKicker: "Perth · Food plants, warehouses, commercial buildings",
-  heroTitle: "The clean is agreed before anyone is on the tools.",
+  heroTitle: "The scope of cleaning is agreed upon and finalized before any work begins.",
   heroText:
-    "Comprehensive Cleaning walks the facility, writes what is in and what is out, then cleans to that window. Food manufacturing, industrial sites, warehouses and offices.",
+    "Comprehensive Cleaning begins with a full facility walkthrough to document scope—clearly defining what is included and excluded—before executing a tailored cleaning plan aligned to that defined scope. We serve food manufacturing facilities, industrial sites, warehouses, and office environments.",
   heroImage: "/uploads/rfp/p6-Im1.jpg",
   heroAlt: "Foam being washed across the floor of a processing room",
-  promise1: "Written scope before the first shift",
-  promise2: "Fitted to the production window",
-  promise3: "A supervisor accountable for the job",
+  promise1: "A written scope is agreed before the first shift commences.",
+  promise2: "Work is scheduled to align with the production window.",
+  promise3: "A dedicated supervisor is accountable for the job.",
   walkImage: "/uploads/rfp/p11-Im2.jpg",
   walkAlt: "Two crew members in aprons after a wash-down",
   walkKicker: "Site assessment",
   walkTitle: "A walk of the building, not a tour of a brochure.",
   walkText:
-    "We look at the areas, the access rules and the time the crew has to be in and out. The quote follows that, so the price is attached to a scope.",
+    "We begin by assessing the areas involved, the access requirements, and the time available for the crew to complete the work. Pricing is then based directly on that defined scope.",
   afterImage: "/photos/steel-detail.jpg",
   afterAlt: "Water on clean stainless steel beside a blue cloth",
   afterKicker: "After the assessment",
   afterTitle: "What you should have in hand before a price.",
   servicesKicker: "Services",
-  servicesTitle: "Three kinds of site. The same way of scoping the work.",
+  servicesTitle: "Three types of site. One consistent approach to scoping the work.",
   approachLink: "Read how a job is run",
   askKicker: "Contact",
-  askTitle: "Request a site assessment",
-  askText: "Tell us the facility and the service. A person reads it and replies. The form does not produce a quote on its own.",
+  askTitle: "Request a Site Assessment",
+  askText: "Provide details of your facility and the service required. Your enquiry will be reviewed personally, and we will respond directly. Please note that submitting this form does not generate an automatic quote.",
   navHome: "Home",
   navServices: "Services",
   navApproach: "Approach",
@@ -64,9 +64,9 @@ const settings = {
   footerTerms: "Terms",
   footerStaff: "Staff sign in",
   promises: JSON.stringify([
-    "Written scope before the first shift",
-    "Fitted to the production window",
-    "A supervisor accountable for the job",
+    "A written scope is agreed before the first shift commences.",
+    "Work is scheduled to align with the production window.",
+    "A dedicated supervisor is accountable for the job.",
   ]),
   ticks: JSON.stringify([
     "The rooms and surfaces included, and the ones left out",
@@ -79,8 +79,8 @@ const settings = {
 const services = [
   {
     slug: "food-manufacturing",
-    name: "Food manufacturing cleaning",
-    short: "Hygiene work planned around production, not squeezed in around it.",
+    name: "Food Manufacturing Cleaning",
+    short: "Hygiene schedules designed around production requirements, not fitted around them as an afterthought.",
     summary:
       "Cleaning and sanitation for food-manufacturing facilities: daily production-area sanitation, equipment cleaning, periodic deep cleans, amenities, and on-demand work. Scoped to the areas, the production window, and the standard the site already works to.",
     image: "/uploads/rfp/p6-Im1.jpg",
@@ -104,8 +104,8 @@ const services = [
   },
   {
     slug: "industrial-warehouse",
-    name: "Industrial & warehouse cleaning",
-    short: "Factories, workshops and warehouses, cleaned to a written scope.",
+    name: "Industrial & Warehouse Cleaning",
+    short: "Factories, workshops and warehouses cleaned in line with a clearly defined scope of work.",
     summary:
       "Planned cleaning for industrial buildings and warehouses: floors, amenities, and the areas that affect safety and day-to-day running.",
     image: "/photos/warehouse.jpg",
@@ -124,8 +124,8 @@ const services = [
   },
   {
     slug: "commercial-office",
-    name: "Commercial & office cleaning",
-    short: "Offices and commercial premises, kept presentable for staff and visitors.",
+    name: "Commercial & Office Cleaning",
+    short: "Offices and commercial premises maintained to a professional standard for staff and visitors alike.",
     summary:
       "Regular and periodic cleaning for offices and commercial premises, scheduled so the work does not get in the way of the people using the building.",
     image: "/photos/office.jpg",
@@ -149,10 +149,10 @@ const pages = [
     slug: "about",
     kicker: "About",
     title: "A Perth company for food plants and the buildings around them.",
-    lede: "Comprehensive Cleaning Pty Ltd is led by Hamilton Campbell, Managing Director. The company is based in Perth, Western Australia and has worked in food-processing environments for 25 years.",
+    lede: "Comprehensive Cleaning Pty Ltd is led by Hamilton Campbell, Managing Director. The company is based in Perth, Western Australia and has worked in food-processing environments for 32 years.",
     image: "/uploads/rfp/p11-Im2.jpg",
     imageAlt: "Two crew members in aprons after a wash-down",
-    body: `Comprehensive Cleaning has worked in food-processing environments for 25 years, from a base in Perth, Western Australia. The work covers food plants, including meat processing, and the industrial, warehouse and commercial areas that sit with those sites.
+    body: `Comprehensive Cleaning has worked in food-processing environments for 32 years, from a base in Perth, Western Australia. The work covers food plants, including meat processing, and the industrial, warehouse and commercial areas that sit with those sites.
 
 Daily sanitation, equipment cleaning, periodic deep cleans, amenities and on-demand callouts are scoped before a crew starts. A supervisor is on the shift and is the contact for the site while the crew is there. Staff are trained in food safety, sanitation and the protective equipment the site requires.
 
@@ -163,7 +163,7 @@ This site explains the work and takes a request for a site assessment. Where a c
   {
     slug: "approach",
     kicker: "Approach",
-    title: "Scope first. Then the crew. Then a review.",
+    title: "The scope comes first. The crew follows. Then a formal review.",
     lede: "The work is accountable when someone can point at what was agreed, who supervised it, and what was recorded afterwards.",
     image: "/uploads/rfp/p11-Im2.jpg",
     imageAlt: "Two crew members in aprons after a wash-down",
@@ -205,7 +205,7 @@ A named next step for the quote, rather than a price made up on the walk.`,
   {
     slug: "resources",
     kicker: "Resources",
-    title: "Notes for people briefing a clean.",
+    title: "Notes for Briefing a Clean",
     lede: "Short guides on assessments, food-plant briefs and cleaning windows. These are operating notes, not case studies.",
     image: "",
     imageAlt: "",
@@ -214,19 +214,19 @@ A named next step for the quote, rather than a price made up on the walk.`,
 ];
 
 const steps = [
-  ["01", "Site assessment", "We walk the facility with your contact, note the areas, the risks, the access rules and the window the work has to fit."],
-  ["02", "Written scope", "You get a scope that says what is included, what is not, how often, and who is supervising. A quote follows that scope."],
-  ["03", "Delivery", "The crew works to the agreed window. The supervisor on the job is accountable for the scope, not a generic task list."],
-  ["04", "Review", "We walk the result with the site contact, record what was done, and agree the next action if something needs to change."],
+  ["01", "Site Assessment", "We conduct a walkthrough of the facility with your designated contact, identifying the relevant areas, risks, access requirements, and operational time constraints."],
+  ["02", "Written Scope", "You receive a detailed scope outlining what is included, what is excluded, the required frequency, and the supervisory structure. A quote is provided based on this agreed scope."],
+  ["03", "Delivery", "The crew operates within the agreed timeframe, with the on-site supervisor accountable for delivery against the scope — not a generic checklist."],
+  ["04", "Review", "We conduct a joint walkthrough with the site contact to confirm completed work and agree on any required follow-up actions."],
 ];
 
 const articles = [
   {
     slug: "what-a-site-assessment-covers",
-    title: "What a site assessment covers",
+    title: "What a Site Assessment Covers",
     kicker: "Guide",
     minutes: "4 min",
-    lede: "A site assessment is a walk-through, not a sales tour. This is what Comprehensive Cleaning looks at before writing a scope.",
+    lede: "A site assessment is a thorough walk-through, not a sales exercise. Here is what Comprehensive Cleaning evaluates before preparing a scope of work.",
     body: `The useful part of an assessment is seeing the building while it is working, or just after it has stopped. A floor plan helps. Standing in the room helps more. We want to know which areas are in play, which are out of bounds, and what a normal production or trading day actually looks like.
 
 For a food plant that means the production window, hygiene entry rules, and the standard the site is already audited against. For a warehouse it means traffic, racking, and the times the floor has to stay clear. For an office it means access after hours, amenities, and the finish expected in reception.
@@ -235,10 +235,10 @@ We leave with notes: areas included, areas excluded, a recommended frequency, an
   },
   {
     slug: "briefing-a-food-plant-clean",
-    title: "How to brief a clean in a food plant",
+    title: "How to Brief a Clean in a Food Plant",
     kicker: "Food manufacturing",
     minutes: "5 min",
-    lede: "The brief that prevents a missed room is short. It names the window, the rules, and the person who can say the job is finished.",
+    lede: "An effective brief is concise, covering the time window, the site rules, and the person authorised to confirm the job is complete — this is what prevents a missed area.",
     body: `Start with the window. If production ends at 11pm and the first shift walks in at 5am, the clean has to be finished, checked and clear of hoses and chemicals before that. Say so in the brief. A start time without a finish time is how a crew and a production team end up in the same room.
 
 Then name the rules that are not optional: induction, boot wash, what can come onto the floor, who supplies chemicals, and which equipment the site’s own people must isolate. If an auditor or a customer standard already defines the clean, share that. The scope should follow the site’s standard, not replace it with a generic one.
@@ -247,10 +247,10 @@ Close the brief with one site contact who can walk the job at the end. Accountab
   },
   {
     slug: "cleaning-windows",
-    title: "Setting a cleaning window around the work",
+    title: "Setting a Cleaning Window Around the Work",
     kicker: "Operations",
     minutes: "4 min",
-    lede: "The clean fails when it collides with production, dispatch or the people still in the office. Agree the window before the first night.",
+    lede: "A clean fails when it conflicts with production, dispatch, or staff still on site. Agreeing the window in advance, before the first shift, avoids this.",
     body: `A cleaning window is the time the crew is allowed to be in each area, and the time they have to be out. In a plant it often sits after production. In a warehouse it may be a weekend when picking stops. In an office it is usually after the last meeting, with the alarm code and the rooms that stay locked.
 
 Write the window against the areas, not against the whole site. The amenities can be done while a line is still running. The line itself cannot. Splitting the scope this way is what makes a regular program possible instead of a string of one-off callouts.
@@ -385,11 +385,11 @@ export async function ensureSlides(db) {
 
 const EXTRA_SETTINGS = {
   servicesKicker: "Services",
-  servicesTitle: "Three kinds of site. The same way of scoping the work.",
+  servicesTitle: "Three types of site. One consistent approach to scoping the work.",
   approachLink: "Read how a job is run",
   askKicker: "Contact",
-  askTitle: "Request a site assessment",
-  askText: "Tell us the facility and the service. A person reads it and replies. The form does not produce a quote on its own.",
+  askTitle: "Request a Site Assessment",
+  askText: "Provide details of your facility and the service required. Your enquiry will be reviewed personally, and we will respond directly. Please note that submitting this form does not generate an automatic quote.",
   navHome: "Home",
   navServices: "Services",
   navApproach: "Approach",
@@ -425,33 +425,34 @@ const EXTRA_SETTINGS = {
   missingGuideLink: "Back to resources",
   formSending: "Sending",
   logoImage: "/logo.png",
-  partnersTitle: "Industry we work with",
-  industryKicker: "Industry we work with",
-  industryTitle: "Commercial cleaning for the food manufacturing industry.",
-  industryLede: "The primary market is food manufacturing and processing. This is commercial cleaning for that industry, scoped as plant sanitation rather than a general commercial clean.",
+  partnersTitle: "Industries We Serve",
+  industryKicker: "Industries We Serve",
+  industryTitle: "Specialist commercial cleaning for the food manufacturing industry.",
+  industryLede: "Food manufacturing and processing represents our primary market. We approach this sector not as general commercial cleaning, but as dedicated plant sanitation, scoped to the specific hygiene demands of food production.",
   industryMarkets: JSON.stringify([
-    "Meat and smallgoods processing facilities",
+    "Meat and Smallgoods Processing Facilities",
     "Abattoirs",
-    "Frozen food production plants",
-    "Prepared and quality foods manufacturers",
+    "Frozen Food Production Plants",
+    "Prepared and Quality Foods Manufacturers",
   ]),
   industryMarketNotes: JSON.stringify([
-    "Rooms, lines and floors",
-    "Holding and processing areas",
-    "Freezers, cold rooms and packing",
-    "Ready-to-eat and convenience lines",
+    "Production rooms, processing lines and floors",
+    "All processing areas",
+    "Freezers, cold rooms and packing areas",
+    "Ready-to-eat and convenience food lines",
   ]),
-  industryAlsoTitle: "Related plants",
-  industryAlso: "Bakeries, dairy processors and seafood plants work under the same hygiene rules. A scope for one of those sites is written the same way: the plant, the window, and the food-safety checks.",
-  industryWorkTitle: "What the clean has to cover",
+  industryAlsoTitle: "Related Facilities",
+  industryAlso: "Bakeries, dairy processors and seafood plants operate under equivalent hygiene regulations. We develop scopes for these facilities using the same disciplined approach: the plant, the operational window, and the required food-safety checks.",
+  industryWorkTitle: "Scope of Cleaning Requirements",
+  industryWorkIntro: "Our cleaning programs are built to address the full range of food-safety obligations, including:",
   industryWork: JSON.stringify([
-    "HACCP and food-safety compliance cleaning",
+    "HACCP and food safety compliance cleaning",
     "Allergen control and cross-contamination prevention",
-    "Sanitation standard operating procedures",
+    "Sanitation standard operating procedures (SSOPs)",
     "Cold storage and freezer cleaning",
     "Wash-down areas and high-pressure sanitation",
-    "Compliance with food-safety audits, including AQIS where a plant is export-registered",
-    "Microbial control, including Listeria and Salmonella",
+    "Compliance with food safety audits, including AQIS requirements for export-registered plants",
+    "Microbial control, including the management of Listeria and Salmonella",
   ]),
   galleryEmpty: "Photographs will appear here once they are published in the CRM.",
   formContact: "Contact name",
@@ -486,17 +487,17 @@ const EXTRA_SETTINGS = {
   reelText: "From the plants, the equipment, and the staff rooms.",
   reelLink: "All photographs",
   reelLabel: "Photographs from the work",
-  promiseKicker: "On every job",
-  promiseTitle: "Agreed first. Then the crew starts.",
-  promiseLink: "How a job is run",
+  promiseKicker: "On Every Job",
+  promiseTitle: "Agreed in advance. Then the crew begins.",
+  promiseLink: "How a Job Is Run",
   certKicker: "Training",
-  certTitle: "Certificates held by the crew.",
-  certLede: "Chemical handling and first aid training issued to people at Comprehensive Cleaning. These are individual records, supplied with the company papers.",
-  certPageLede: "Chemical handling and first aid training issued to people at Comprehensive Cleaning. These are individual records, supplied with the company papers. Open a certificate to read it.",
-  certLink: "All certificates",
-  workKicker: "On site",
-  workTitle: "The work, by the kind of area.",
-  workLink: "Open the gallery",
+  certTitle: "Certifications held by our crew.",
+  certLede: "Chemical handling and first aid training issued to personnel at Comprehensive Cleaning. These are individual, verifiable records provided alongside the company's documentation.",
+  certPageLede: "Chemical handling and first aid training issued to personnel at Comprehensive Cleaning. These are individual, verifiable records provided alongside the company's documentation. Open a certificate to read it.",
+  certLink: "All Certificates",
+  workKicker: "On Site",
+  workTitle: "Our work, organised by area type.",
+  workLink: "View the gallery",
   galleryAll: "All",
   galleryFilters: "Photograph categories",
   backToTop: "Back to top",
@@ -505,9 +506,9 @@ const EXTRA_SETTINGS = {
   footerGallery: "Gallery",
   footerContact: "Contact",
   galleryCategories: JSON.stringify([
-    { id: "food", title: "Food and meat processing", text: "Wash-down of processing rooms, lines and floors. This is the work the company wants to be known for." },
-    { id: "plant", title: "Equipment and high-level wash", text: "Machinery, conveyors and the overhead plant, including work from a lift." },
-    { id: "amenities", title: "Offices and staff amenities", text: "Lunch rooms, offices and change areas that sit with a food plant." },
+    { id: "food", title: "Food and Meat Processing", text: "Wash-down of processing rooms, production lines and floors — the core discipline the company is built on." },
+    { id: "plant", title: "Equipment and High-Level Wash", text: "Cleaning of machinery, conveyors and overhead plant, including elevated work platform access where required." },
+    { id: "amenities", title: "Offices and Staff Amenities", text: "Maintenance cleaning of office spaces and amenities to a professional standard for staff comfort and presentation." },
   ]),
   promiseImages: JSON.stringify([
     { src: "/work/food/food-06.jpg", position: "50% 62%" },
@@ -557,8 +558,8 @@ A job names the areas, the window, the supervisor and the record made at the end
   {
     slug: "training",
     kicker: "Training",
-    title: "Certificates held by the crew.",
-    lede: "Chemical handling and first aid training issued to people at Comprehensive Cleaning. These are individual records, supplied with the company papers. Open a certificate to read it.",
+    title: "Certifications held by our crew.",
+    lede: "Chemical handling and first aid training issued to personnel at Comprehensive Cleaning. These are individual, verifiable records provided alongside the company's documentation. Open a certificate to read it.",
     image: "",
     imageAlt: "",
     body: "",
@@ -665,9 +666,127 @@ export async function ensureSettings(db) {
   }
   if (have.has("launchPosts")) await exec(db, "DELETE FROM settings WHERE key = ?", ["launchPosts"]);
   if (have.get("partnersTitle") === "Partners") {
-    await exec(db, "UPDATE settings SET value = ? WHERE key = ?", ["Industry we work with", "partnersTitle"]);
+    await exec(db, "UPDATE settings SET value = ? WHERE key = ?", ["Industries We Serve", "partnersTitle"]);
   }
   await exec(db, "UPDATE partners SET published = 0");
+  await applyHomepageWording(db);
+}
+
+const COPY_REVISION = "home-wording-1";
+
+async function putSetting(db, key, value) {
+  const existing = await one(db, "SELECT key FROM settings WHERE key = ?", [key]);
+  if (existing) await exec(db, "UPDATE settings SET value = ? WHERE key = ?", [value, key]);
+  else await exec(db, "INSERT INTO settings (key, value) VALUES (?, ?)", [key, value]);
+}
+
+export async function applyHomepageWording(db) {
+  const current = await one(db, "SELECT value FROM settings WHERE key = ?", ["copyRevision"]);
+  if (current?.value === COPY_REVISION) return;
+
+  const text = {
+    footer: "Comprehensive Cleaning Pty Ltd provides specialist cleaning services to food-processing plants, industrial sites, warehouses and commercial buildings. Based in Perth, Western Australia, the company brings 32 years of experience in food-processing environments.",
+    heroTitle: "The scope of cleaning is agreed upon and finalized before any work begins.",
+    heroText: "Comprehensive Cleaning begins with a full facility walkthrough to document scope—clearly defining what is included and excluded—before executing a tailored cleaning plan aligned to that defined scope. We serve food manufacturing facilities, industrial sites, warehouses, and office environments.",
+    servicesTitle: "Three types of site. One consistent approach to scoping the work.",
+    walkText: "We begin by assessing the areas involved, the access requirements, and the time available for the crew to complete the work. Pricing is then based directly on that defined scope.",
+    askTitle: "Request a Site Assessment",
+    askText: "Provide details of your facility and the service required. Your enquiry will be reviewed personally, and we will respond directly. Please note that submitting this form does not generate an automatic quote.",
+    promise1: "A written scope is agreed before the first shift commences.",
+    promise2: "Work is scheduled to align with the production window.",
+    promise3: "A dedicated supervisor is accountable for the job.",
+    partnersTitle: "Industries We Serve",
+    industryKicker: "Industries We Serve",
+    industryTitle: "Specialist commercial cleaning for the food manufacturing industry.",
+    industryLede: "Food manufacturing and processing represents our primary market. We approach this sector not as general commercial cleaning, but as dedicated plant sanitation, scoped to the specific hygiene demands of food production.",
+    industryAlsoTitle: "Related Facilities",
+    industryAlso: "Bakeries, dairy processors and seafood plants operate under equivalent hygiene regulations. We develop scopes for these facilities using the same disciplined approach: the plant, the operational window, and the required food-safety checks.",
+    industryWorkTitle: "Scope of Cleaning Requirements",
+    industryWorkIntro: "Our cleaning programs are built to address the full range of food-safety obligations, including:",
+    promiseKicker: "On Every Job",
+    promiseTitle: "Agreed in advance. Then the crew begins.",
+    promiseLink: "How a Job Is Run",
+    certTitle: "Certifications held by our crew.",
+    certLede: "Chemical handling and first aid training issued to personnel at Comprehensive Cleaning. These are individual, verifiable records provided alongside the company's documentation.",
+    certPageLede: "Chemical handling and first aid training issued to personnel at Comprehensive Cleaning. These are individual, verifiable records provided alongside the company's documentation. Open a certificate to read it.",
+    certLink: "All Certificates",
+    workKicker: "On Site",
+    workTitle: "Our work, organised by area type.",
+    workLink: "View the gallery",
+  };
+  for (const [key, value] of Object.entries(text)) await putSetting(db, key, value);
+  await putSetting(db, "promises", JSON.stringify([text.promise1, text.promise2, text.promise3]));
+  await putSetting(db, "industryMarkets", JSON.stringify([
+    "Meat and Smallgoods Processing Facilities",
+    "Abattoirs",
+    "Frozen Food Production Plants",
+    "Prepared and Quality Foods Manufacturers",
+  ]));
+  await putSetting(db, "industryMarketNotes", JSON.stringify([
+    "Production rooms, processing lines and floors",
+    "All processing areas",
+    "Freezers, cold rooms and packing areas",
+    "Ready-to-eat and convenience food lines",
+  ]));
+  await putSetting(db, "industryWork", JSON.stringify([
+    "HACCP and food safety compliance cleaning",
+    "Allergen control and cross-contamination prevention",
+    "Sanitation standard operating procedures (SSOPs)",
+    "Cold storage and freezer cleaning",
+    "Wash-down areas and high-pressure sanitation",
+    "Compliance with food safety audits, including AQIS requirements for export-registered plants",
+    "Microbial control, including the management of Listeria and Salmonella",
+  ]));
+  await putSetting(db, "galleryCategories", JSON.stringify([
+    { id: "food", title: "Food and Meat Processing", text: "Wash-down of processing rooms, production lines and floors — the core discipline the company is built on." },
+    { id: "plant", title: "Equipment and High-Level Wash", text: "Cleaning of machinery, conveyors and overhead plant, including elevated work platform access where required." },
+    { id: "amenities", title: "Offices and Staff Amenities", text: "Maintenance cleaning of office spaces and amenities to a professional standard for staff comfort and presentation." },
+  ]));
+
+  const services = [
+    ["food-manufacturing", "Food Manufacturing Cleaning", "Hygiene schedules designed around production requirements, not fitted around them as an afterthought."],
+    ["industrial-warehouse", "Industrial & Warehouse Cleaning", "Factories, workshops and warehouses cleaned in line with a clearly defined scope of work."],
+    ["commercial-office", "Commercial & Office Cleaning", "Offices and commercial premises maintained to a professional standard for staff and visitors alike."],
+  ];
+  for (const [slug, name, short] of services) {
+    await exec(db, "UPDATE services SET name = ?, short = ? WHERE slug = ?", [name, short, slug]);
+  }
+
+  const steps = [
+    ["01", "Site Assessment", "We conduct a walkthrough of the facility with your designated contact, identifying the relevant areas, risks, access requirements, and operational time constraints."],
+    ["02", "Written Scope", "You receive a detailed scope outlining what is included, what is excluded, the required frequency, and the supervisory structure. A quote is provided based on this agreed scope."],
+    ["03", "Delivery", "The crew operates within the agreed timeframe, with the on-site supervisor accountable for delivery against the scope — not a generic checklist."],
+    ["04", "Review", "We conduct a joint walkthrough with the site contact to confirm completed work and agree on any required follow-up actions."],
+  ];
+  for (const [n, title, text] of steps) {
+    await exec(db, "UPDATE steps SET title = ?, text = ? WHERE n = ?", [title, text, n]);
+  }
+
+  const articles = [
+    ["what-a-site-assessment-covers", "What a Site Assessment Covers", "A site assessment is a thorough walk-through, not a sales exercise. Here is what Comprehensive Cleaning evaluates before preparing a scope of work."],
+    ["briefing-a-food-plant-clean", "How to Brief a Clean in a Food Plant", "An effective brief is concise, covering the time window, the site rules, and the person authorised to confirm the job is complete — this is what prevents a missed area."],
+    ["cleaning-windows", "Setting a Cleaning Window Around the Work", "A clean fails when it conflicts with production, dispatch, or staff still on site. Agreeing the window in advance, before the first shift, avoids this."],
+  ];
+  for (const [slug, title, lede] of articles) {
+    await exec(db, "UPDATE articles SET title = ?, lede = ? WHERE slug = ?", [title, lede, slug]);
+  }
+
+  await exec(db, "UPDATE pages SET title = ? WHERE slug = ?", ["The scope comes first. The crew follows. Then a formal review.", "approach"]);
+  await exec(db, "UPDATE pages SET title = ? WHERE slug = ?", ["Notes for Briefing a Clean", "resources"]);
+  await exec(
+    db,
+    "UPDATE pages SET title = ?, lede = ? WHERE slug = ?",
+    [text.certTitle, text.certPageLede, "training"]
+  );
+  const about = await one(db, "SELECT lede, body FROM pages WHERE slug = ?", ["about"]);
+  if (about) {
+    await exec(db, "UPDATE pages SET lede = ?, body = ? WHERE slug = ?", [
+      String(about.lede || "").replace(/25 years/g, "32 years"),
+      String(about.body || "").replace(/25 years/g, "32 years"),
+      "about",
+    ]);
+  }
+  await putSetting(db, "copyRevision", COPY_REVISION);
 }
 
 const WORK_GROUPS = [
