@@ -441,6 +441,24 @@ function csvCell(value) {
   return text;
 }
 
+async function deliverEnquiryMail(db, { leadId, to, subject, text, replyTo, now }) {
+  let status = "queued";
+  try {
+    const result = await sendMail({ to, subject, text, replyTo });
+    if (result.sent) status = "sent";
+  } catch (error) {
+    console.error("Enquiry email failed:", error?.message || error);
+  }
+  await exec(db, "INSERT INTO outbox (lead_id, to_email, subject, body, status, created_at) VALUES (?, ?, ?, ?, ?, ?)", [
+    leadId,
+    to,
+    subject,
+    text,
+    status,
+    now,
+  ]);
+}
+
 async function createLead(db, input, { user = null, publicForm, addActivity, notifyAdmins }) {
   const contactName = clean(input?.contactName, 120);
   const email = clean(input?.email, 160);
@@ -505,14 +523,13 @@ async function createLead(db, input, { user = null, publicForm, addActivity, not
   if (notes) await addActivity(id, user?.id || null, "note", notes);
 
   if (email) {
-    await exec(db, "INSERT INTO outbox (lead_id, to_email, subject, body, status, created_at) VALUES (?, ?, ?, ?, ?, ?)", [
-      id,
-      email,
-      `We have your enquiry ${reference}`,
-      `Hello ${contactName},\n\nThank you for contacting Comprehensive Cleaning. Your enquiry reference is ${reference}. We will review the site details and be in touch about a site assessment.\n\nComprehensive Cleaning Pty Ltd`,
-      "queued",
+    await deliverEnquiryMail(db, {
+      leadId: id,
+      to: email,
+      subject: `We have your enquiry ${reference}`,
+      text: `Hello ${contactName},\n\nThank you for contacting Comprehensive Cleaning. Your enquiry reference is ${reference}. We will review the site details and be in touch about a site assessment.\n\nComprehensive Cleaning Pty Ltd\ninfo@comprehensivecleaning.au`,
       now,
-    ]);
+    });
   }
   if (publicForm) {
     const inbox = enquiryInbox();
@@ -529,21 +546,14 @@ async function createLead(db, input, { user = null, publicForm, addActivity, not
       "",
       notes,
     ].join("\n");
-    let status = "queued";
-    try {
-      const result = await sendMail({ to: inbox, subject: `New enquiry ${reference}`, text: notice });
-      if (result.sent) status = "sent";
-    } catch (error) {
-      console.error("Enquiry email failed:", error?.message || error);
-    }
-    await exec(db, "INSERT INTO outbox (lead_id, to_email, subject, body, status, created_at) VALUES (?, ?, ?, ?, ?, ?)", [
-      id,
-      inbox,
-      `New enquiry ${reference}`,
-      notice,
-      status,
+    await deliverEnquiryMail(db, {
+      leadId: id,
+      to: inbox,
+      subject: `New enquiry ${reference}`,
+      text: notice,
+      replyTo: email,
       now,
-    ]);
+    });
   }
   await notifyAdmins(
     id,

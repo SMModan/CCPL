@@ -1020,7 +1020,7 @@ function LeadDetail() {
             {pack.messages.map((message) => (
               <article key={message.id}>
                 <strong>{message.subject}</strong>
-                <p className="muted">To {message.to_email} · {message.status}. Sending waits on an email account.</p>
+                <p className="muted">To {message.to_email} · {message.status === "sent" ? "Sent" : "Waiting to send"}</p>
                 <p>{message.body}</p>
               </article>
             ))}
