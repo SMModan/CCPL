@@ -4,7 +4,7 @@ export function enquiryInbox() {
   return process.env.ENQUIRY_TO || "info@comprehensivecleaning.au";
 }
 
-export async function sendMail({ to, subject, text, replyTo }) {
+export async function sendMail({ to, subject, text, html, replyTo }) {
   const host = process.env.SMTP_HOST;
   if (!host || !to) return { sent: false };
   const port = Number(process.env.SMTP_PORT || 587);
@@ -25,6 +25,7 @@ export async function sendMail({ to, subject, text, replyTo }) {
     replyTo: replyTo || undefined,
     subject,
     text,
+    html: html || undefined,
   });
   return { sent: true };
 }

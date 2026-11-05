@@ -10,6 +10,7 @@ import { hashPassword, openDatabase, verifyPassword } from "./db.js";
 import { exec, many, one } from "./pgdb.js";
 import { publishedServiceNames, registerContent } from "./contentRoutes.js";
 import { ensureClientFromWonLead, registerOps } from "./opsRoutes.js";
+import { acknowledgementEmail, enquiryNoticeEmail } from "./emailTemplate.js";
 import { enquiryInbox, sendMail } from "./mail.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -441,10 +442,10 @@ function csvCell(value) {
   return text;
 }
 
-async function deliverEnquiryMail(db, { leadId, to, subject, text, replyTo, now }) {
+async function deliverEnquiryMail(db, { leadId, to, subject, text, html, replyTo, now }) {
   let status = "queued";
   try {
-    const result = await sendMail({ to, subject, text, replyTo });
+    const result = await sendMail({ to, subject, text, html, replyTo });
     if (result.sent) status = "sent";
   } catch (error) {
     console.error("Enquiry email failed:", error?.message || error);
@@ -522,35 +523,38 @@ async function createLead(db, input, { user = null, publicForm, addActivity, not
   await addActivity(id, user?.id || null, "created", publicForm ? "Website enquiry received." : `${user.name} created this lead.`);
   if (notes) await addActivity(id, user?.id || null, "note", notes);
 
+  const companyName = clean(input?.companyName, 160);
+  const serviceWindow = clean(input?.serviceWindow, 80);
+  const facility = clean(input?.facilityDetails, 2000);
   if (email) {
+    const acknowledgement = acknowledgementEmail({ reference, contactName });
     await deliverEnquiryMail(db, {
       leadId: id,
       to: email,
-      subject: `We have your enquiry ${reference}`,
-      text: `Hello ${contactName},\n\nThank you for contacting Comprehensive Cleaning. Your enquiry reference is ${reference}. We will review the site details and be in touch about a site assessment.\n\nComprehensive Cleaning Pty Ltd\ninfo@comprehensivecleaning.au`,
+      subject: acknowledgement.subject,
+      text: acknowledgement.text,
+      html: acknowledgement.html,
       now,
     });
   }
   if (publicForm) {
-    const inbox = enquiryInbox();
-    const notice = [
-      `New website enquiry ${reference}`,
-      "",
-      `Name: ${contactName}`,
-      `Company: ${clean(input?.companyName, 160)}`,
-      `Email: ${email}`,
-      `Phone: ${phone}`,
-      `Service: ${service}`,
-      `Window: ${clean(input?.serviceWindow, 80)}`,
-      `Facility: ${clean(input?.facilityDetails, 2000)}`,
-      "",
+    const notice = enquiryNoticeEmail({
+      reference,
+      contactName,
+      companyName,
+      email,
+      phone,
+      service,
+      serviceWindow,
+      facility,
       notes,
-    ].join("\n");
+    });
     await deliverEnquiryMail(db, {
       leadId: id,
-      to: inbox,
-      subject: `New enquiry ${reference}`,
-      text: notice,
+      to: enquiryInbox(),
+      subject: notice.subject,
+      text: notice.text,
+      html: notice.html,
       replyTo: email,
       now,
     });
